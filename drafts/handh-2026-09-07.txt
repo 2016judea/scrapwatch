@@ -1,0 +1,25 @@
+DRAFT - not sent. Recipient verified off handh.net 2026-09-07: H&H Buying & Selling, Inc., 3236 California St NE, Minneapolis MN 55418, sales@handh.net (no personal mailbox published), MX handh-net.mail.protection.outlook.com. Every number below derives from brickandmortar.dev/api/export?dataset=teardowns on 2026-09-07.
+
+To: sales@handh.net
+Attn: Purchasing
+From: aidan@brickandmortar.dev (Brick & Mortar AI LLC)
+Subject: 25 commercial teardowns in Minneapolis this year, with the demo contractor named
+
+Hello,
+
+Minneapolis has issued 25 commercial and apartment wrecking permits in the last twelve months. The city names the demolition firm on each one. Eight firms, most of them out in Corcoran, Hopkins, Elk River and St. Michael.
+
+The newest is 1600 Marshall St NE. Built 1961, assessed at $2,030,000, permit BLDG1183493 issued August 13 to MM Miller Brothers Excavating of Corcoran. The building is still standing as I write this.
+
+You are three miles from it.
+
+A permit does not say what is inside. It says who is about to take the building apart, and when. That is the call I would want to make first, before the gear goes on a scrap truck at weight.
+
+We publish the whole list free: brickandmortar.dev/datasets/teardowns. And I built a small alert on top of it. You give an email, you pick Minneapolis or Saint Paul, and you get a note the day a new wrecking permit or a large commercial electrical permit posts. Nothing on a quiet day.
+
+scrapwatch.vercel.app
+
+If this is useful I would like to know what you would want on the row that is not there yet. If it is not, a one-line reply saying so helps too.
+
+Best,
+Aidan

@@ -1,0 +1,23 @@
+DRAFT - not sent. Recipient verified off t-r.com/contact.php 2026-09-07 (rendered in Chrome; the site's Cloudflare wall blocks plain fetches): T&R Electric Supply Co., Inc., 308 SW 3rd St, Colman SD 57017, sales@trelectric.com, 1-800-843-7994. No personal mailbox is published; the site has a "Surplus Wanted" page. MX trelectric-com.mail.protection.outlook.com. Every number below derives from brickandmortar.dev/api/export?dataset=teardowns on 2026-09-07.
+
+To: sales@trelectric.com
+Attn: Surplus Wanted / purchasing
+From: aidan@brickandmortar.dev (Brick & Mortar AI LLC)
+Subject: Twin Cities buildings coming down, before the gear is scrapped
+
+Hello,
+
+Your Surplus Wanted page asks people to tell you about equipment they are retiring. Most never do. The building comes down and the transformer goes out as steel.
+
+The permit desk knows first. Minneapolis issued 25 commercial and apartment wrecking permits in the last twelve months and named the demolition firm on every one. Saint Paul files big commercial electrical jobs with the declared value, and the top tenth of those, $42,000 and up, is 353 permits since 2020.
+
+One row from August: 1600 Marshall St NE, Minneapolis, built 1961, assessed at $2,030,000, permit BLDG1183493 to MM Miller Brothers Excavating. Standing today.
+
+I joined the two cities' permit feeds to the parcel record and put it out free, as a file: brickandmortar.dev/datasets/teardowns. Then a small alert on top of it. An email the day a new row posts, filtered to the city and kind you want, nothing on a quiet day. It is at scrapwatch.vercel.app.
+
+The honest limit is in the file's own warning. A permit says who is taking the building apart and when. It does not say what is inside. That part is still a phone call, but now it is a phone call you can make before the excavator arrives.
+
+If your buyers would use this, I would like to hear what else should be on the row. If not, a one-line no is just as useful to me.
+
+Best,
+Aidan
