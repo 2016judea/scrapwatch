@@ -1,0 +1,11 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": null,
+  "outputDirectory": ".",
+  "functions": {
+    "api/scrapwatch.js": { "maxDuration": 60 }
+  },
+  "crons": [
+    { "path": "/api/scrapwatch?action=check", "schedule": "0 13 * * *" }
+  ]
+}

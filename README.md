@@ -36,6 +36,26 @@ business only when the same feed is repeated city by city.
 
 Free first. Signups are the demand measurement. A price goes on the alert, never the record.
 
+## How it runs
+
+- **Source:** `SOURCE_URL`, the platform's `/api/export?dataset=teardowns&format=json&columns=…`
+  (558 rows on 2026-09-07: 205 teardowns, 353 top-decile electrical jobs). Cached 10 min.
+- **One function**, `api/scrapwatch.js`, routed by `?action=`: `feed`, `subscribe`,
+  `unsubscribe`, `check` (the cron), `status`. Vercel Hobby caps functions at 12; this uses one.
+- **Storage:** Cloudflare Workers KV over REST (namespace `SCRAPWATCH`), because the account
+  token was already on disk. Keys: `sub:<id>`, `seen`, `log:<date>`, `log:latest`.
+- **Mail:** Mailgun on `brickandmortar.dev`, plain text, hyphens not em dashes, unsubscribe
+  link in every message.
+- **Cron:** daily at 13:00 UTC (`vercel.json`). The first run **baselines** and mails nothing;
+  after that a subscriber is mailed only the rows that are new and match their city and kind.
+- **A row's identity is `permit_no|address`**, not the permit number alone: one permit can be
+  filed on two addresses (2 of 558 rows).
+- **Counting signups:** `GET /api/scrapwatch?action=status` with `Authorization: Bearer $CRON_SECRET`.
+
+Local: `node scripts/serve_local.mjs 4180` loads `.env` and serves the page and the function.
+Tests: `npm test`.
+
 ## Status
 
-Scaffolded 2026-09-07 from a research session in the `bricks` repo. Nothing deployed yet.
+Scaffolded 2026-09-07 from a research session in the `bricks` repo; built the same evening.
+Live at scrapwatch.vercel.app. One subscriber (the test address). No price, no Stripe.
