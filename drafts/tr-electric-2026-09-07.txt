@@ -1,23 +1,27 @@
-DRAFT - not sent. Recipient verified off t-r.com/contact.php 2026-09-07 (rendered in Chrome; the site's Cloudflare wall blocks plain fetches): T&R Electric Supply Co., Inc., 308 SW 3rd St, Colman SD 57017, sales@trelectric.com, 1-800-843-7994. No personal mailbox is published; the site has a "Surplus Wanted" page. MX trelectric-com.mail.protection.outlook.com. Every number below derives from brickandmortar.dev/api/export?dataset=teardowns on 2026-09-07.
+DRAFT - not sent. Recipient verified off t-r.com/contact.php 2026-09-07 (rendered in Chrome; the site's Cloudflare wall blocks plain fetches): T&R Electric Supply Co., Inc., 308 SW 3rd St, Colman SD 57017, sales@trelectric.com, 1-800-843-7994. No personal mailbox is published; the site has a "Surplus Wanted" page. MX trelectric-com.mail.protection.outlook.com. Every number below derives from brickandmortar.dev/api/export?dataset=teardowns as refreshed 2026-09-07 (registers to 2026-09-04). Rewritten 2026-09-07 on Aidan's call: the email IS the heads-up, free, no pitch; the only ask is whether it was useful.
 
 To: sales@trelectric.com
 Attn: Surplus Wanted / purchasing
 From: aidan@brickandmortar.dev (Brick & Mortar AI LLC)
-Subject: Twin Cities buildings coming down, before the gear is scrapped
+Subject: Four Minneapolis commercial buildings with wrecking permits, none down yet
 
 Hello,
 
-Your Surplus Wanted page asks people to tell you about equipment they are retiring. Most never do. The building comes down and the transformer goes out as steel.
+Your Surplus Wanted page asks people to tell you before equipment is retired. Here are four they will not call about.
 
-The permit desk knows first. Minneapolis issued 25 commercial and apartment wrecking permits in the last twelve months and named the demolition firm on every one. Saint Paul files big commercial electrical jobs with the declared value, and the top tenth of those, $42,000 and up, is 353 permits since 2020.
+Minneapolis issued wrecking permits on these commercial buildings in the last four weeks. All four are still standing.
 
-One row from August: 1600 Marshall St NE, Minneapolis, built 1961, assessed at $2,030,000, permit BLDG1183493 to MM Miller Brothers Excavating. Standing today.
+525 Malcolm Ave SE. Industrial, built 1934, assessed $2,100,600. Permit BLDG1190381 issued September 3 to Veit and Co, Rogers MN.
 
-I joined the two cities' permit feeds to the parcel record and put it out free, as a file: brickandmortar.dev/datasets/teardowns. Then a small alert on top of it. An email the day a new row posts, filtered to the city and kind you want, nothing on a quiet day. It is at scrapwatch.vercel.app.
+3246 Nicollet Ave. Commercial, built 1971, assessed $356,000. Permit BLDG1182786 issued August 31 to Ramsey Companies, 8297 Brooklyn Blvd.
 
-The honest limit is in the file's own warning. A permit says who is taking the building apart and when. It does not say what is inside. That part is still a phone call, but now it is a phone call you can make before the excavator arrives.
+1516 Marshall St NE. Commercial, built 1929, assessed $814,300. Permit BLDG1183518 issued August 19 to MM Miller Brothers Excavating, Corcoran MN.
 
-If your buyers would use this, I would like to hear what else should be on the row. If not, a one-line no is just as useful to me.
+1600 Marshall St NE. Commercial, built 1961, assessed $2,030,000. Permit BLDG1183493 issued August 13, also MM Miller Brothers.
+
+The permit says who is taking the building apart and when. It does not say what is inside. That part is a call to the contractor.
+
+I pull these off the city's permit desk. Was this useful to you? A one-line yes or no is all I am after.
 
 Best,
 Aidan
