@@ -59,3 +59,6 @@ Tests: `npm test`.
 
 Scaffolded 2026-09-07 from a research session in the `bricks` repo; built the same evening.
 Live at scrapwatch.vercel.app. One subscriber (the test address). No price, no Stripe.
+First real alert fired 2026-09-07 evening after the bricks permits refresh landed: 3 new
+Minneapolis teardowns (525 Malcolm Ave SE, 3246 Nicollet Ave, 1516 Marshall St NE),
+one email, delivered. The source now refreshes daily at 06:30 (`bricks/scripts/refresh_permits.sh`).
