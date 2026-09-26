@@ -1,6 +1,6 @@
 token,firm,channel,touch,record,drafted,sent,message_id,reply_date,reply_kind
-sw-dc-bolander,Carl Bolander and Sons LLC,contact_form,1,BLDG1138751 321 25th St E 2025-10-03,2026-09-26,,,,
-sw-dc-rachel,Rachel Contracting LLC,contact_form,1,BLDG1162943 1001 West Broadway 2026-05-22,2026-09-26,,,,
-sw-dc-veit,Veit and Co Inc,contact_form,1,BLDG1190381 525 Malcolm Ave SE 2026-09-03,2026-09-26,,,,
-sw-dc-lloyds,"Lloyds Construction Services, Inc.",contact_form,1,BLDG1150303-05 Winter St NE / 14th Ave SE 2026-01-14,2026-09-26,,,,
-sw-dc-kevitt,Kevitt Excavating LLC,contact_form,1,BLDG1046501 1900 22nd St E 2024-03-18,2026-09-26,,,,
+sw-dc-bolander,Carl Bolander and Sons LLC,contact_form,1,BLDG1138751 321 25th St E 2025-10-03,2026-09-26,2026-09-26,contact_form:https://bolander.com/contact-us/,,
+sw-dc-rachel,Rachel Contracting LLC,contact_form,1,BLDG1162943 1001 West Broadway 2026-05-22,2026-09-26,2026-09-26,contact_form:https://www.rachelcontracting.com/contact/,,
+sw-dc-veit,Veit and Co Inc,contact_form,1,BLDG1190381 525 Malcolm Ave SE 2026-09-03,2026-09-26,2026-09-26,contact_form:https://veitusa.com/contact/,,
+sw-dc-lloyds,"Lloyds Construction Services, Inc.",contact_form,1,BLDG1150303-05 Winter St NE / 14th Ave SE 2026-01-14,2026-09-26,2026-09-26,contact_form:https://lloydsconstruction.net/,,
+sw-dc-kevitt,Kevitt Excavating LLC,contact_form,1,BLDG1046501 1900 22nd St E 2024-03-18,2026-09-26,,"BLOCKED 2026-09-26: kevitt.com/contact ends on reCAPTCHA (form said ""The reCAPTCHA was invalid""); touch 1 moves to LinkedIn company page",,
