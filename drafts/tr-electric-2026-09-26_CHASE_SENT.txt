@@ -1,0 +1,10 @@
+SENT 2026-09-26 00:26 CDT from aidan@brickandmortar.dev (Zoho, plaintext, in-thread reply to the 09-07 heads-up) to sales@trelectric.com. Zoho messageId 1790400383367155000. Message-ID <1a0dc2dc941.160b9a5e152699.4175384230946969999@brickandmortar.dev>. Authority: ~/.claude/pending.json entry chase-tr-electric-teardown-headsup-2026-09-21 (one chase with fresh rows, then close). Zoho searched first: no reply from the domain since 09-07, spam and trash included. Row source: brickandmortar.dev/api/export?dataset=teardowns, newest row with an address (the 09-22 Veit row has address null and was left out).
+
+One more since I wrote on September 7.
+
+1300 West Broadway, Minneapolis. Wrecking permit issued September 21 to Kamish Excavating, 11496 Courthouse Blvd, Inver Grove Heights. Still standing.
+
+Same question as last time: useful or not? A one-line no closes this out and I will not write again.
+
+Best,
+Aidan
