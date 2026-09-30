@@ -182,9 +182,21 @@ async function status(req, res) {
   });
 }
 
+// THE ALERT CARD ON brickandmortar.dev posts here from the browser (the `trade`
+// role, 2026-09-30). Only its origins get CORS; the rest of the API stays same-site.
+const CORS_ORIGINS = new Set(["https://brickandmortar.dev", "https://www.brickandmortar.dev"]);
+
 export default async function handler(req, res) {
   const url = new URL(req.url, "http://local");
   const action = url.searchParams.get("action") || "feed";
+  const origin = req.headers.origin || "";
+  if (CORS_ORIGINS.has(origin) && (action === "subscribe" || action === "feed")) {
+    res.setHeader("Access-Control-Allow-Origin", origin);
+    res.setHeader("Vary", "Origin");
+    res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+    if (req.method === "OPTIONS") { res.status(204).end(); return; }
+  }
   try {
     if (action === "feed" && req.method === "GET") return await feed(req, res, url);
     if (action === "subscribe" && req.method === "POST") return await subscribe(req, res);
