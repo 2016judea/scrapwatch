@@ -27,7 +27,7 @@ const FIELDS = "Display,APN,Neighborhoods_Desc,applicantName,permitNumber,occupa
 // The seen set from the old bricks-export source keyed rows differently; a new
 // key means the first run on this source baselines instead of mailing a year.
 const SEEN_KEY = "seen:mpls-wrecking";
-const UA = { "User-Agent": "demolition-notice/1.0 (+https://scrapwatch.vercel.app)" };
+const UA = { "User-Agent": "demolition-notice/1.0 (+https://demolition-notice.vercel.app)" };
 
 let cache = { at: 0, payload: null };
 const CACHE_MS = 10 * 60 * 1000;
@@ -124,7 +124,7 @@ async function sendMail({ to, subject, text }) {
   return resp.json();
 }
 
-function siteUrl() { return (process.env.SITE_URL || "https://scrapwatch.vercel.app").replace(/\/$/, ""); }
+function siteUrl() { return (process.env.SITE_URL || "https://demolition-notice.vercel.app").replace(/\/$/, ""); }
 function unsubUrl(id, token) { return `${siteUrl()}/api/scrapwatch?action=unsubscribe&id=${id}&token=${token}`; }
 function authed(req) {
   const s = process.env.CRON_SECRET;

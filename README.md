@@ -3,7 +3,7 @@
 A free email the morning a building in Minneapolis gets a demolition permit: the address,
 the company tearing it down, and a map link.
 
-Live at **scrapwatch.vercel.app**. (The repo kept its old name, scrapwatch.)
+Live at **demolition-notice.vercel.app** (scrapwatch.vercel.app still serves). (The repo kept its old name, scrapwatch.)
 
 ## Who it's for
 
