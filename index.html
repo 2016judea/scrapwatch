@@ -107,7 +107,7 @@
 
   let rows = [];
   try {
-    const r = await fetch("/api/scrapwatch");
+    const r = await fetch("/api/scrapwatch?map=1");
     const d = await r.json();
     if (!r.ok) throw new Error(d.error);
     rows = d.rows.filter((x) => x.lat && x.lon);
