@@ -1,9 +1,9 @@
 {
   "name": "scrapwatch",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "type": "module",
-  "description": "Alerts for people who buy used transformers and switchgear: teardowns and big electrical jobs, before the scrap yard hears.",
+  "description": "Demolition Notice: a free email the morning a Minneapolis building gets a demolition permit. For scrappers and junk haulers.",
   "scripts": {
     "test": "node --test lib/core.test.js",
     "dev": "node scripts/serve_local.mjs"

@@ -2,32 +2,78 @@
 // functions; one is plenty here and keeps the whole product in one file.
 //
 //   GET  /api/scrapwatch?action=feed&limit=12      latest rows + totals (the page reads this)
-//   POST /api/scrapwatch?action=subscribe          {email, city, signals[]}
+//   POST /api/scrapwatch?action=subscribe          {email, kinds[]}  (kinds: house, big)
 //   GET  /api/scrapwatch?action=unsubscribe&id=&token=
 //   GET  /api/scrapwatch?action=check              the daily cron (Bearer CRON_SECRET)
 //   GET  /api/scrapwatch?action=status             subscribers + last run (Bearer CRON_SECRET)
 //
-// The source of truth is the Brick & Mortar export at SOURCE_URL. This service
-// owns the notification and nothing else: it never re-scrapes a permit desk.
+// SOURCE (2026-10-06): the City of Minneapolis permit register, read directly,
+// every Wrecking permit issued in the last year. This used to read the bricks
+// platform export, which stopped refreshing when the bricks permits job was
+// disabled on 2026-10-02; the alert could never fire. Year built is joined from
+// Hennepin County's parcel layer by APN, and the join is optional: if the county
+// is down the alert still goes, without the year.
 
 import crypto from "node:crypto";
 import { kvGet, kvPut, kvList } from "../lib/kv.js";
 import {
   newRows, rowKey, matches, validateSignup, subscriberId,
-  renderMail, renderConfirmation, summarize,
+  renderMail, renderConfirmation, summarize, toRow,
 } from "../lib/core.js";
+
+const REGISTER = "https://services.arcgis.com/afSMGVsC7QlRK1kZ/arcgis/rest/services/CCS_Permits/FeatureServer/0/query";
+const PARCELS = "https://gis.hennepin.us/arcgis/rest/services/HennepinData/LAND_PROPERTY/MapServer/1/query";
+const FIELDS = "Display,APN,Neighborhoods_Desc,applicantName,permitNumber,occupancyType,status,comments,issueDate";
+// The seen set from the old bricks-export source keyed rows differently; a new
+// key means the first run on this source baselines instead of mailing a year.
+const SEEN_KEY = "seen:mpls-wrecking";
+const UA = { "User-Agent": "demolition-notice/1.0 (+https://scrapwatch.vercel.app)" };
 
 let cache = { at: 0, payload: null };
 const CACHE_MS = 10 * 60 * 1000;
 
+async function wreckingPermits(sinceIso) {
+  const out = [];
+  for (let offset = 0; ; offset += 2000) {
+    const q = new URLSearchParams({
+      where: `permitType='Wrecking' AND status<>'Cancelled' AND issueDate >= date '${sinceIso}'`,
+      outFields: FIELDS, orderByFields: "issueDate DESC", returnGeometry: "false",
+      resultOffset: String(offset), resultRecordCount: "2000", f: "json",
+    });
+    const r = await fetch(`${REGISTER}?${q}`, { headers: UA });
+    if (!r.ok) throw new Error(`register ${r.status}`);
+    const d = await r.json();
+    if (d.error) throw new Error(`register: ${d.error.message || "error"}`);
+    for (const f of d.features || []) out.push(f.attributes);
+    if (!d.exceededTransferLimit) break;
+  }
+  return out;
+}
+
+async function yearsBuilt(apns) {
+  const years = {};
+  const ids = [...new Set(apns.filter((x) => /^\d{13}$/.test(x || "")))];
+  for (let i = 0; i < ids.length; i += 150) {
+    try {
+      const body = new URLSearchParams({
+        where: `PID IN (${ids.slice(i, i + 150).map((x) => `'${x}'`).join(",")})`,
+        outFields: "PID,BUILD_YR", returnGeometry: "false", f: "json",
+      });
+      const r = await fetch(PARCELS, { method: "POST", headers: { ...UA, "Content-Type": "application/x-www-form-urlencoded" }, body, signal: AbortSignal.timeout(15000) });
+      const d = await r.json();
+      for (const f of d.features || []) years[f.attributes.PID] = f.attributes.BUILD_YR;
+    } catch (e) { console.error("year built join skipped", e.message); }
+  }
+  return years;
+}
+
 async function source() {
   if (cache.payload && Date.now() - cache.at < CACHE_MS) return cache.payload;
-  const url = process.env.SOURCE_URL;
-  if (!url) throw new Error("SOURCE_URL is not set");
-  const r = await fetch(url, { headers: { "User-Agent": "scrapwatch/0.1 (+https://scrapwatch.vercel.app)" } });
-  if (!r.ok) throw new Error(`source ${r.status}`);
-  const payload = await r.json();
-  if (!Array.isArray(payload.rows)) throw new Error("source has no rows");
+  const since = new Date(Date.now() - 365 * 864e5).toISOString().slice(0, 10);
+  const raw = await wreckingPermits(since);
+  const years = await yearsBuilt(raw.map((a) => a.APN));
+  const rows = raw.map((a) => toRow(a, years)).sort((a, b) => (a.issued < b.issued ? 1 : -1));
+  const payload = { since, rows, fetched: new Date().toISOString() };
   cache = { at: Date.now(), payload };
   return payload;
 }
@@ -41,7 +87,7 @@ async function readBody(req) {
   if (!raw) return {};
   if ((req.headers["content-type"] || "").includes("application/x-www-form-urlencoded")) {
     const p = new URLSearchParams(raw);
-    return { email: p.get("email"), city: p.get("city"), signals: p.getAll("signals") };
+    return { email: p.get("email"), kinds: p.getAll("kinds") };
   }
   try { return JSON.parse(raw); } catch { return {}; }
 }
@@ -50,7 +96,7 @@ async function sendMail({ to, subject, text }) {
   const { MAILGUN_API_KEY, MAILGUN_DOMAIN, MAILGUN_FROM } = process.env;
   if (!MAILGUN_API_KEY || !MAILGUN_DOMAIN) throw new Error("Mailgun is not configured");
   const params = new URLSearchParams();
-  params.set("from", `Scrapwatch <${MAILGUN_FROM || `hello@${MAILGUN_DOMAIN}`}>`);
+  params.set("from", `Demolition Notice <${MAILGUN_FROM || `hello@${MAILGUN_DOMAIN}`}>`);
   params.set("to", to);
   params.set("subject", subject);
   params.set("text", text);
@@ -76,11 +122,11 @@ function authed(req) {
 async function feed(req, res, url) {
   const payload = await source();
   const limit = Math.min(Math.max(Number(url.searchParams.get("limit")) || 12, 1), 100);
-  res.setHeader("Cache-Control", "public, max-age=600");
+  res.setHeader("Cache-Control", "public, max-age=600, s-maxage=3600");
   res.status(200).json({
-    subject: payload.subject,
-    source: payload.source,
-    licence: payload.licence,
+    source: "City of Minneapolis permit register, Wrecking permits",
+    since: payload.since,
+    fetched: payload.fetched,
     totals: summarize(payload.rows),
     rows: payload.rows.slice(0, limit),
   });
@@ -104,7 +150,7 @@ async function subscribe(req, res) {
   let mailed = true;
   try { await sendMail({ to: sub.email, ...mail }); }
   catch (e) { mailed = false; console.error("confirmation mail failed", e.message); }
-  res.status(200).json({ ok: true, mailed, city: sub.city, signals: sub.signals });
+  res.status(200).json({ ok: true, mailed, kinds: sub.kinds });
 }
 
 async function unsubscribe(req, res, url) {
@@ -115,10 +161,10 @@ async function unsubscribe(req, res, url) {
   if (ok) await kvPut(`sub:${id}`, { ...sub, active: false, updated: new Date().toISOString() });
   res.setHeader("Content-Type", "text/html; charset=utf-8");
   res.status(ok ? 200 : 400).end(
-    `<!doctype html><meta name=viewport content="width=device-width,initial-scale=1"><title>Scrapwatch</title>` +
+    `<!doctype html><meta name=viewport content="width=device-width,initial-scale=1"><title>Demolition Notice</title>` +
     `<body style="font:18px/1.5 system-ui;margin:3rem auto;max-width:34rem;padding:0 1rem">` +
-    (ok ? `<p>Done. No more emails.</p><p><a href="${siteUrl()}">Back to Scrapwatch</a></p>`
-        : `<p>That link didn't match a subscription. Reply to any Scrapwatch email and we'll sort it by hand.</p>`),
+    (ok ? `<p>Done. No more emails.</p><p><a href="${siteUrl()}">Back to Demolition Notice</a></p>`
+        : `<p>That link didn't match a subscription. Reply to any Demolition Notice email and we'll sort it by hand.</p>`),
   );
 }
 
@@ -133,15 +179,15 @@ async function check(req, res) {
   cache = { at: 0, payload: null };
   const payload = await source();
   const rows = payload.rows;
-  const seen = await kvGet("seen");
+  const seen = await kvGet(SEEN_KEY);
   const today = new Date().toISOString().slice(0, 10);
 
   // FIRST RUN: baseline, never mail. An empty seen set makes every row "new",
-  // and mailing 558 historical permits to a new subscriber would be the last
+  // and mailing a year of historical permits to a new subscriber would be the last
   // mail they read.
   if (!Array.isArray(seen)) {
     const all = rows.map(rowKey).filter(Boolean);
-    await kvPut("seen", all);
+    await kvPut(SEEN_KEY, all);
     const log = { date: today, baseline: true, seen: all.length, new: 0, mailed: 0 };
     await kvPut(`log:${today}`, log); await kvPut("log:latest", log);
     res.status(200).json(log); return;
@@ -154,17 +200,17 @@ async function check(req, res) {
     for (const sub of subs) {
       const mine = fresh.filter((r) => matches(sub, r));
       if (!mine.length) continue;
-      const mail = renderMail({ rows: mine, sub, siteUrl: siteUrl(), unsubUrl: unsubUrl(sub.id, sub.token) });
+      const mail = renderMail({ rows: mine, siteUrl: siteUrl(), unsubUrl: unsubUrl(sub.id, sub.token) });
       try { await sendMail({ to: sub.email, ...mail }); mailed += 1; }
       catch (e) { failures.push({ id: sub.id, error: e.message }); }
     }
-    await kvPut("seen", [...new Set([...seen, ...fresh.map(rowKey)])]);
+    await kvPut(SEEN_KEY, [...new Set([...seen, ...fresh.map(rowKey)])]);
   }
   const log = {
     date: today, baseline: false, seen: seen.length, new: fresh.length,
     new_permits: fresh.slice(0, 50).map((r) => r.permit_no),
     subscribers: subs.length, mailed, failures,
-    source_last_issued: summarize(rows).by_city,
+    source_newest: summarize(rows).newest,
   };
   await kvPut(`log:${today}`, log); await kvPut("log:latest", log);
   res.status(200).json(log);
@@ -176,8 +222,7 @@ async function status(req, res) {
   res.status(200).json({
     subscribers: subs.length,
     active: subs.filter((s) => s.active).length,
-    by_city: subs.reduce((a, s) => ((a[s.city] = (a[s.city] || 0) + 1), a), {}),
-    signups: subs.map((s) => ({ email: s.email, city: s.city, signals: s.signals, active: s.active, created: s.created })),
+    signups: subs.map((s) => ({ email: s.email, kinds: s.kinds || null, legacy: s.signals ? { city: s.city, signals: s.signals } : undefined, active: s.active, created: s.created })),
     last_run: await kvGet("log:latest"),
   });
 }

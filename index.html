@@ -3,119 +3,113 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Scrapwatch</title>
-<meta name="description" content="An email the day a commercial building gets a wrecking permit, or an electrician files a big job, in Minneapolis or Saint Paul. For people who buy used transformers and switchgear.">
+<title>Demolition Notice</title>
+<meta name="description" content="A building in Minneapolis is getting knocked down. Get the address and who is doing the job, the morning the city says yes. Free email for scrappers and junk haulers.">
 <style>
-  :root { --ink:#141414; --mute:#5c5c5c; --line:#dcdcdc; --paper:#fbfaf7; --accent:#b4530a; --tag:#eee8dd; }
+  :root { --ink:#151515; --mute:#5e5e5e; --line:#dedad2; --paper:#f8f6f1; --card:#fff; --accent:#c2410c; --tag:#efe9df; --big:#e3eaf3; }
   * { box-sizing:border-box; }
   html { color-scheme: light; }
   body { margin:0; background:var(--paper); color:var(--ink); font:17px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
-  main { max-width:36rem; margin:0 auto; padding:2.25rem 1.1rem 4rem; }
-  h1 { font-size:2rem; line-height:1.15; margin:0 0 .75rem; letter-spacing:-.01em; }
-  h2 { font-size:1.05rem; margin:2.5rem 0 .75rem; text-transform:uppercase; letter-spacing:.06em; color:var(--mute); }
-  p { margin:0 0 1rem; }
-  .lede { font-size:1.15rem; }
-  .brand { font-weight:700; letter-spacing:.02em; margin-bottom:2rem; display:flex; align-items:center; gap:.5rem; }
-  .brand i { width:.7rem; height:.7rem; background:var(--accent); display:inline-block; border-radius:2px; }
-  form { background:#fff; border:1px solid var(--line); border-radius:12px; padding:1.1rem; margin:1.25rem 0 0; }
-  label { display:block; font-weight:600; margin:.9rem 0 .35rem; }
-  label:first-child { margin-top:0; }
-  input[type=email], select { width:100%; font:inherit; padding:.7rem .8rem; border:1px solid #bbb; border-radius:8px; background:#fff; }
-  .checks { display:flex; gap:1.25rem; flex-wrap:wrap; font-weight:500; }
-  .checks label { display:flex; align-items:center; gap:.45rem; margin:0; font-weight:500; }
-  .checks input { width:1.15rem; height:1.15rem; }
-  button { width:100%; margin-top:1.1rem; font:inherit; font-weight:700; padding:.85rem; border:0; border-radius:8px; background:var(--accent); color:#fff; cursor:pointer; }
+  main { max-width:36rem; margin:0 auto; padding:1.5rem 1rem 4rem; }
+  .brand { font-weight:800; letter-spacing:.04em; text-transform:uppercase; font-size:.85rem; margin-bottom:1.25rem; display:flex; align-items:center; gap:.5rem; }
+  .brand i { width:.75rem; height:.75rem; background:var(--accent); display:inline-block; border-radius:2px; }
+  h1 { font-size:1.9rem; line-height:1.12; margin:0 0 .7rem; letter-spacing:-.015em; }
+  h2 { font-size:.95rem; margin:2.25rem 0 .6rem; text-transform:uppercase; letter-spacing:.06em; color:var(--mute); }
+  p { margin:0 0 .9rem; }
+  .lede { font-size:1.1rem; }
+  form { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:1rem; margin:1rem 0 0; }
+  input[type=email] { width:100%; font:inherit; font-size:16px; padding:.75rem .8rem; border:1px solid #bbb; border-radius:8px; background:#fff; }
+  .checks { display:flex; gap:.5rem 1.1rem; flex-wrap:wrap; margin:.8rem 0 0; }
+  .checks label { display:flex; align-items:center; gap:.45rem; font-weight:500; min-height:44px; }
+  .checks input { width:1.2rem; height:1.2rem; }
+  button { width:100%; margin-top:.6rem; font:inherit; font-weight:700; padding:.9rem; border:0; border-radius:8px; background:var(--accent); color:#fff; cursor:pointer; }
   button:disabled { opacity:.6; }
-  .msg { margin-top:.8rem; min-height:1.4rem; font-weight:500; }
+  .msg { margin-top:.7rem; min-height:1.4rem; font-weight:500; }
   .msg.err { color:#a11; }
+  .msg:empty { display:none; }
   .fine { color:var(--mute); font-size:.92rem; }
-  ul.rows { list-style:none; margin:0; padding:0; border-top:1px solid var(--line); }
-  ul.rows li { padding:.8rem 0; border-bottom:1px solid var(--line); }
-  .row1 { display:flex; gap:.6rem; align-items:baseline; flex-wrap:wrap; }
-  .tag { font-size:.72rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase; background:var(--tag); padding:.15rem .45rem; border-radius:4px; }
-  .tag.electrical { background:#e4ecf5; }
-  .date { color:var(--mute); font-variant-numeric:tabular-nums; font-size:.92rem; }
-  .addr { font-weight:600; }
-  .firm { color:var(--mute); font-size:.95rem; }
-  .stats { display:grid; grid-template-columns:1fr 1fr; gap:.75rem; margin:.5rem 0 0; }
-  .stat { background:#fff; border:1px solid var(--line); border-radius:10px; padding:.8rem .9rem; }
-  .stat b { display:block; font-size:1.5rem; line-height:1.1; }
-  .stat span { color:var(--mute); font-size:.9rem; }
-  footer { margin-top:3rem; color:var(--mute); font-size:.9rem; }
+  .stats { display:grid; grid-template-columns:1fr 1fr; gap:.6rem; }
+  .stat { background:var(--card); border:1px solid var(--line); border-radius:10px; padding:.7rem .85rem; }
+  .stat b { display:block; font-size:1.6rem; line-height:1.1; }
+  .stat span { color:var(--mute); font-size:.88rem; }
+  ul.rows { list-style:none; margin:.9rem 0 0; padding:0; border-top:1px solid var(--line); }
+  ul.rows li { padding:.85rem 0; border-bottom:1px solid var(--line); }
+  .row1 { display:flex; gap:.55rem; align-items:baseline; flex-wrap:wrap; }
+  .tag { font-size:.72rem; font-weight:700; letter-spacing:.05em; text-transform:uppercase; background:var(--tag); padding:.15rem .45rem; border-radius:4px; }
+  .tag.big { background:var(--big); }
+  .date { color:var(--mute); font-variant-numeric:tabular-nums; font-size:.9rem; }
+  .addr { font-weight:650; font-size:1.05rem; }
+  .addr a { text-decoration:none; }
+  .addr a::after { content:" ↗"; color:var(--mute); font-weight:400; font-size:.85em; }
+  .who { color:var(--mute); font-size:.95rem; overflow-wrap:anywhere; }
+  ol.how { padding-left:1.2rem; margin:0; }
+  ol.how li { margin:0 0 .45rem; }
+  footer { margin-top:2.75rem; color:var(--mute); font-size:.9rem; }
   a { color:inherit; }
-  @media (min-width:560px) { h1 { font-size:2.4rem; } }
+  @media (min-width:620px) { main { padding-top:2.5rem; } h1 { font-size:2.5rem; } .stats { grid-template-columns:repeat(4,1fr); } }
 </style>
 </head>
 <body>
 <main>
-  <div class="brand"><i></i> Scrapwatch</div>
+  <div class="brand"><i></i> Demolition Notice</div>
 
-  <h1>Know about the teardown before the scrap truck does.</h1>
-  <p class="lede">A commercial building gets a wrecking permit. An electrician files a big job on one still standing. Either way, working gear is about to come out. We check the file once a day. When a new permit shows up, you get one email.</p>
-  <p class="fine">Minneapolis and Saint Paul. Free while we learn who wants it.</p>
+  <h1>A building near you is getting knocked down.</h1>
+  <p class="lede">Copper wire. Furnaces. AC units. Water heaters. They all go somewhere. We email you the address and who is tearing it down, the morning after the city says yes.</p>
 
   <form id="f" method="post" action="/api/scrapwatch?action=subscribe">
-    <label for="email">Your email</label>
-    <input id="email" name="email" type="email" required autocomplete="email" placeholder="you@company.com">
-    <label for="city">Where</label>
-    <select id="city" name="city">
-      <option value="any">Minneapolis and Saint Paul</option>
-      <option value="Minneapolis">Minneapolis only</option>
-      <option value="Saint Paul">Saint Paul only</option>
-    </select>
-    <label>What</label>
-    <div class="checks">
-      <label><input type="checkbox" name="signals" value="teardown" checked> Teardowns</label>
-      <label><input type="checkbox" name="signals" value="electrical" checked> Big electrical jobs</label>
+    <input id="email" name="email" type="email" required autocomplete="email" placeholder="Your email" aria-label="Your email">
+    <div class="checks" role="group" aria-label="Which buildings">
+      <label><input type="checkbox" name="kinds" value="house" checked> Houses</label>
+      <label><input type="checkbox" name="kinds" value="big" checked> Apartments and stores</label>
     </div>
     <button id="go" type="submit">Email me new ones</button>
     <div id="msg" class="msg" role="status"></div>
   </form>
+  <p class="fine" style="margin-top:.6rem">Free. Minneapolis. One email on days there is a new one, none on days there isn't.</p>
 
-  <h2>Latest permits</h2>
+  <h2>Latest teardowns</h2>
   <div id="stats" class="stats" hidden></div>
-  <ul id="rows" class="rows"><li class="fine">Loading the latest rows…</li></ul>
-  <p class="fine" id="cov"></p>
+  <ul id="rows" class="rows"><li class="fine">Loading the latest…</li></ul>
 
-  <h2>What you get</h2>
-  <p>One plain-text email on any day a new permit lands: date, address, teardown or electrical, the firm doing the work and its mailing address. Nothing on a quiet day.</p>
-  <p>A permit is permission, not a piece of equipment. Nothing in the record says what is inside. The firm on the row is who to call, and we give you the number of the permit so you can check it yourself.</p>
+  <h2>Before you go</h2>
+  <ol class="how">
+    <li>The permit means the city said yes. Some buildings come down that same week. Drive by first.</li>
+    <li>Ask the owner or the crew before you take anything. The company name is on every row.</li>
+  </ol>
 
   <footer>
-    <p>Rows come from the Minneapolis and Saint Paul permit desks through <a href="https://brickandmortar.dev/datasets/teardowns/">Brick &amp; Mortar</a>, CC BY 4.0. The whole file is free there, as CSV or XLSX. <span id="rule"></span></p>
+    <p>Every row is a public demolition permit from the City of Minneapolis, checked every morning. <span id="fresh"></span></p>
     <p>Questions: aidan@brickandmortar.dev</p>
   </footer>
 </main>
 
 <script>
 (async () => {
-  const money = (v) => "$" + Math.round(Number(v)).toLocaleString("en-US");
   const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const day = (iso) => { const [y, m, d] = iso.split("-").map(Number); return new Date(Date.UTC(y, m - 1, d, 12)).toLocaleDateString("en-US", { month: "short", day: "numeric", timeZone: "UTC" }); };
   try {
-    const r = await fetch("/api/scrapwatch?action=feed&limit=12");
+    const r = await fetch("/api/scrapwatch?action=feed&limit=15");
     const d = await r.json();
+    if (!r.ok) throw new Error(d.error);
     const t = d.totals;
     const st = document.getElementById("stats");
     st.hidden = false;
     st.innerHTML = [
-      [t.teardown, "teardowns in the file"],
-      [t.electrical, "big electrical jobs"],
+      [t.last_30, "in the last 30 days"],
+      [t.rows, "in the last year"],
+      [t.houses, "were houses"],
+      [t.big, "apartments or stores"],
     ].map(([n, l]) => `<div class="stat"><b>${Number(n).toLocaleString("en-US")}</b><span>${l}</span></div>`).join("");
     document.getElementById("rows").innerHTML = d.rows.map((x) => `
       <li>
-        <div class="row1"><span class="tag ${x.signal}">${x.signal === "teardown" ? "teardown" : "electrical"}</span>
-          <span class="date">${esc(x.issued)}</span></div>
-        <div class="addr">${esc(x.address)}</div>
-        <div class="firm">${esc(x.firm || "firm not named")}${x.value_usd ? " · " + money(x.value_usd) + " declared" : ""}${x.work && x.work !== "Private" ? " · " + esc(x.work) : ""}</div>
+        <div class="row1"><span class="tag ${x.kind}">${esc(x.label)}</span>
+          <span class="date">${day(x.issued)}${x.year_built ? " · built " + x.year_built : ""}</span></div>
+        <div class="addr"><a href="${esc(x.map)}" target="_blank" rel="noopener">${esc(x.address)}</a></div>
+        <div class="who">${esc(x.wrecker || "Company not listed")}${x.hood ? " · " + esc(x.hood) : ""}${x.what ? " · " + esc(x.what) : ""}</div>
       </li>`).join("");
-    const bc = t.by_city || {};
-    const cities = Object.keys(bc).sort();
-    document.getElementById("cov").textContent = cities.length
-      ? "Last permit in the file: " + cities.map((c) => `${c} ${bc[c].last_issued}`).join(" · ") + ". If a city's date is old, its desk has stopped publishing and we will say so the day it restarts."
-      : "";
-    document.getElementById("rule").textContent = d.subject ? `The file today: ${d.subject}.` : "";
+    document.getElementById("fresh").textContent = t.newest ? `Newest permit: ${day(t.newest)}.` : "";
   } catch (e) {
-    document.getElementById("rows").innerHTML = `<li class="fine">The feed didn't load. The file itself is always at brickandmortar.dev/datasets/teardowns/.</li>`;
+    document.getElementById("rows").innerHTML = `<li class="fine">The list didn't load. Try again in a minute.</li>`;
   }
 
   const f = document.getElementById("f"), msg = document.getElementById("msg"), go = document.getElementById("go");
@@ -123,14 +117,14 @@
     ev.preventDefault();
     msg.className = "msg"; msg.textContent = "";
     const fd = new FormData(f);
-    const body = { email: fd.get("email"), city: fd.get("city"), signals: fd.getAll("signals") };
-    if (!body.signals.length) { msg.className = "msg err"; msg.textContent = "Pick at least one: teardowns or electrical."; return; }
+    const body = { email: fd.get("email"), kinds: fd.getAll("kinds") };
+    if (!body.kinds.length) { msg.className = "msg err"; msg.textContent = "Pick houses, apartments and stores, or both."; return; }
     go.disabled = true;
     try {
       const r = await fetch("/api/scrapwatch?action=subscribe", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
       const d = await r.json();
       if (!r.ok || !d.ok) throw new Error(d.error || "Something went wrong.");
-      msg.textContent = d.mailed ? "You're on. Check your inbox for a note from Scrapwatch." : "You're on. The first email comes the next day a permit lands.";
+      msg.textContent = d.mailed ? "You're on. Check your inbox." : "You're on. Your first email comes with the next teardown.";
       f.querySelector("#email").value = "";
     } catch (e) {
       msg.className = "msg err"; msg.textContent = e.message;
