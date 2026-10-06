@@ -43,6 +43,17 @@
   summary { cursor:pointer; font-weight:600; font-size:.88rem; min-height:28px; display:flex; align-items:center; }
   dl { display:grid; grid-template-columns:auto 1fr; gap:.15rem .6rem; margin:.3rem 0 0; font-size:.85rem; }
   dt { color:var(--mute); } dd { margin:0; }
+  /* phones: the record opens in a bottom sheet, not a 290px popup the map has to pan around */
+  #sheet { position:fixed; left:0; right:0; bottom:0; z-index:1000; max-height:58dvh; overflow-y:auto; overscroll-behavior:contain;
+    background:#fff; border-radius:14px 14px 0 0; box-shadow:0 -6px 24px rgba(0,0,0,.18); padding:.4rem 1rem max(1rem, env(safe-area-inset-bottom)); font-size:15px; }
+  #sheet .grab { position:sticky; top:0; display:flex; justify-content:center; padding:.2rem 0 .1rem; background:#fff; }
+  #sheet .grab::before { content:""; width:2.5rem; height:4px; border-radius:2px; background:var(--line); }
+  #sheet .x { position:absolute; top:.2rem; right:.3rem; width:44px; height:44px; border:0; background:none; font-size:1.5rem; line-height:1; color:var(--mute); cursor:pointer; }
+  #sheet .p-addr { padding-right:2.4rem; font-size:1.15rem; }
+  #sheet summary { min-height:44px; }
+  .locate { width:44px; height:44px; border:0; background:#fff; font-size:1.3rem; line-height:1; cursor:pointer; color:var(--ink); }
+  .leaflet-control-attribution { white-space:nowrap; max-width:100vw; overflow:hidden; text-overflow:ellipsis; }
+  @media (pointer:coarse) { .leaflet-control-zoom { display:none; } }
   dl h4 { grid-column:1 / -1; margin:.4rem 0 0; font-size:.75rem; text-transform:uppercase; letter-spacing:.05em; color:var(--mute); }
 </style>
 </head>
@@ -56,6 +67,7 @@
   </div>
 </header>
 <div id="map"><div id="status">Loading every teardown…</div></div>
+<aside id="sheet" hidden aria-label="Teardown details"><div class="grab"></div><button class="x" aria-label="Close">×</button><div id="sheet-body"></div></aside>
 <footer>Drive by first. Ask the owner or crew before you take anything.</footer>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
@@ -70,11 +82,27 @@
   const fmt = (iso) => { if (!iso) return ""; const [y, m, d] = iso.split("-").map(Number); return new Date(Date.UTC(y, m - 1, d || 1, 12)).toLocaleDateString("en-US", { month: "short", ...(d ? { day: "numeric" } : {}), year: "numeric", timeZone: "UTC" }); };
   const ago = (n) => n <= 0 ? "today" : n === 1 ? "yesterday" : n < 60 ? `${n} days ago` : n < 730 ? `${Math.round(n / 30.4)} months ago` : `${Math.floor(n / 365)} years ago`;
 
-  const map = L.map("map", { zoomControl: false, preferCanvas: true, maxZoom: 16 }).setView([44.97, -93.265], 12);
+  const coarse = matchMedia("(pointer:coarse)").matches;
+  const phone = () => matchMedia("(max-width:600px)").matches;
+  // a fingertip is ~40px; widen the canvas hit area so the 4.5px grey dots can be tapped
+  const map = L.map("map", { zoomControl: false, renderer: L.canvas({ tolerance: coarse ? 9 : 2 }), maxZoom: 16, attributionControl: false }).setView([44.97, -93.265], 12);
+  L.control.attribution({ prefix: false }).addTo(map);
   L.control.zoom({ position: "bottomright" }).addTo(map);
+  // "near me": the visitor is usually in a truck, deciding which way to drive
+  const Locate = L.Control.extend({ options: { position: "bottomright" }, onAdd() {
+    const b = L.DomUtil.create("button", "locate leaflet-bar");
+    b.title = "Show teardowns near me"; b.setAttribute("aria-label", b.title); b.textContent = "◎";
+    L.DomEvent.disableClickPropagation(b);
+    b.onclick = () => map.locate({ setView: true, maxZoom: 15 });
+    return b;
+  } });
+  new Locate().addTo(map);
+  let me;
+  map.on("locationfound", (e) => { (me ||= L.circleMarker(e.latlng, { radius: 7, fillColor: "#2563eb", fillOpacity: 1, color: "#fff", weight: 3, interactive: false }).addTo(map)).setLatLng(e.latlng); });
+  map.on("locationerror", () => { $("status").textContent = "Couldn't find you. Allow location and try again."; setTimeout(() => ($("status").textContent = ""), 3000); });
   // Esri's keyless light-gray canvas; Carto's light_all started answering "API KEY REQUIRED" (2026-10-06)
   L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}", {
-    maxZoom: 16, attribution: "Esri, HERE, OSM · City of Minneapolis · Hennepin County · Overture Maps",
+    maxZoom: 16, attribution: "Esri, HERE, OSM · Minneapolis · Hennepin Co. · Overture",
   }).addTo(map);
   L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Reference/MapServer/tile/{z}/{y}/{x}", { maxZoom: 16 }).addTo(map);
 
@@ -130,9 +158,31 @@
     const style = n <= 30 ? { radius: 9, fillColor: "#c2410c", fillOpacity: .95, color: "#fff", weight: 2 }
       : n <= 365 ? { radius: 6.5, fillColor: "#f59e0b", fillOpacity: .9, color: "#fff", weight: 1.5 }
       : { radius: 4.5, fillColor: "#8a8178", fillOpacity: .45, color: "#8a8178", weight: .5, opacity: .6 };
-    const m = L.circleMarker([r.lat, r.lon], style).bindPopup(() => (r.el ||= Object.assign(document.createElement("div"), { innerHTML: popup(r) })), { maxWidth: 290, maxHeight: Math.max(260, $("map").clientHeight - 70), autoPanPadding: [10, 10] });
+    const m = L.circleMarker([r.lat, r.lon], style).on("click", (e) => { L.DomEvent.stopPropagation(e); open(r, m); });
     return { m, n, r };
   });
+
+  const sheet = $("sheet"), ring = L.circleMarker([0, 0], { radius: 13, fill: false, color: "#151515", weight: 3, interactive: false });
+  function open(r, m) {
+    if (!phone()) {
+      closeSheet();
+      L.popup({ maxWidth: 290, maxHeight: Math.max(260, $("map").clientHeight - 70), autoPanPadding: [10, 10] })
+        .setLatLng(m.getLatLng()).setContent(r.el ||= Object.assign(document.createElement("div"), { innerHTML: popup(r) })).openOn(map);
+      return;
+    }
+    map.closePopup();
+    $("sheet-body").innerHTML = popup(r);
+    sheet.hidden = false; sheet.scrollTop = 0;
+    ring.setLatLng(m.getLatLng()).addTo(map);
+    // keep the tapped pin in the strip of map the sheet leaves showing
+    const box = $("map").getBoundingClientRect(), pt = map.latLngToContainerPoint(m.getLatLng());
+    const visible = Math.max(80, sheet.getBoundingClientRect().top - box.top);
+    map.panBy([pt.x - box.width / 2, pt.y - visible / 2]);
+  }
+  function closeSheet() { if (sheet.hidden) return; sheet.hidden = true; ring.remove(); }
+  sheet.querySelector(".x").addEventListener("click", closeSheet);
+  map.on("click", closeSheet);
+  addEventListener("keydown", (e) => e.key === "Escape" && closeSheet());
   // opening "Everything we know" grows the popup; re-lay it out so it pans back into view
   map.on("popupopen", (e) => {
     const d = e.popup.getElement().querySelector("details");
@@ -145,12 +195,13 @@
     document.querySelectorAll(".chips button").forEach((b) => b.setAttribute("aria-pressed", String(Number(b.dataset.days) === days)));
   }
   document.querySelectorAll(".chips button").forEach((b) => b.addEventListener("click", () => show(Number(b.dataset.days))));
-  map.fitBounds(L.latLngBounds(rows.map((r) => [r.lat, r.lon])), { padding: [8, 8] });
   show(0);
   // ?p=<permit number> opens that pin, so a message can point at one building
   const want = new URLSearchParams(location.search).get("p");
   const hit = want && marks.find((x) => x.r.permit_no === want.toUpperCase());
-  if (hit) { map.setView(hit.m.getLatLng(), 16); hit.m.openPopup(); }
+  // fitBounds animates, and its zoom would land after (and undo) the jump to the pin
+  if (hit) { map.setView(hit.m.getLatLng(), 16, { animate: false }); open(hit.r, hit.m); }
+  else map.fitBounds(L.latLngBounds(rows.map((r) => [r.lat, r.lon])), { padding: [8, 8] });
 })();
 </script>
 </body>
