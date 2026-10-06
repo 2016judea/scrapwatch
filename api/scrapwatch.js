@@ -50,30 +50,42 @@ async function wreckingPermits(sinceIso) {
   return out;
 }
 
+// Year built never changes, so every answer the county gives is kept in KV
+// ("years") and only APNs not already there are asked for. The county's server
+// answered from a laptop and failed from Vercel on the same afternoon
+// (2026-10-06); with the cache, one good answer is enough forever.
 async function yearsBuilt(apns) {
-  const years = {};
-  const ids = [...new Set(apns.filter((x) => /^\d{13}$/.test(x || "")))];
+  let years = {};
+  try { years = (await kvGet("years")) || {}; } catch { years = {}; }
+  const ids = [...new Set(apns.filter((x) => /^\d{13}$/.test(x || "") && !(x in years)))];
+  const join = { asked: ids.length, got: 0, errors: [] };
   for (let i = 0; i < ids.length; i += 150) {
+    const batch = ids.slice(i, i + 150);
     try {
       const body = new URLSearchParams({
-        where: `PID IN (${ids.slice(i, i + 150).map((x) => `'${x}'`).join(",")})`,
+        where: `PID IN (${batch.map((x) => `'${x}'`).join(",")})`,
         outFields: "PID,BUILD_YR", returnGeometry: "false", f: "json",
       });
-      const r = await fetch(PARCELS, { method: "POST", headers: { ...UA, "Content-Type": "application/x-www-form-urlencoded" }, body, signal: AbortSignal.timeout(15000) });
-      const d = await r.json();
-      for (const f of d.features || []) years[f.attributes.PID] = f.attributes.BUILD_YR;
-    } catch (e) { console.error("year built join skipped", e.message); }
+      const r = await fetch(PARCELS, { method: "POST", headers: { ...UA, "Content-Type": "application/x-www-form-urlencoded" }, body, signal: AbortSignal.timeout(20000) });
+      const text = await r.text();
+      const d = JSON.parse(text);
+      if (d.error) throw new Error(d.error.message || "county error");
+      for (const f of d.features || []) { years[f.attributes.PID] = f.attributes.BUILD_YR; join.got += 1; }
+      // a PID the county answered without is recorded as unknown, so it is not re-asked daily
+      for (const x of batch) if (!(x in years)) years[x] = null;
+    } catch (e) { join.errors.push(String(e.message).slice(0, 120)); }
   }
-  return years;
+  if (join.got || ids.length) { try { await kvPut("years", years); } catch {} }
+  return { years, join };
 }
 
 async function source() {
   if (cache.payload && Date.now() - cache.at < CACHE_MS) return cache.payload;
   const since = new Date(Date.now() - 365 * 864e5).toISOString().slice(0, 10);
   const raw = await wreckingPermits(since);
-  const years = await yearsBuilt(raw.map((a) => a.APN));
+  const { years, join } = await yearsBuilt(raw.map((a) => a.APN));
   const rows = raw.map((a) => toRow(a, years)).sort((a, b) => (a.issued < b.issued ? 1 : -1));
-  const payload = { since, rows, fetched: new Date().toISOString() };
+  const payload = { since, rows, join, fetched: new Date().toISOString() };
   cache = { at: Date.now(), payload };
   return payload;
 }
@@ -127,6 +139,7 @@ async function feed(req, res, url) {
     source: "City of Minneapolis permit register, Wrecking permits",
     since: payload.since,
     fetched: payload.fetched,
+    year_join: { ...payload.join, with_year: payload.rows.filter((r) => r.year_built).length },
     totals: summarize(payload.rows),
     rows: payload.rows.slice(0, limit),
   });
