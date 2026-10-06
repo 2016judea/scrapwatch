@@ -131,7 +131,7 @@
       : n <= 365 ? { radius: 6.5, fillColor: "#f59e0b", fillOpacity: .9, color: "#fff", weight: 1.5 }
       : { radius: 4.5, fillColor: "#8a8178", fillOpacity: .45, color: "#8a8178", weight: .5, opacity: .6 };
     const m = L.circleMarker([r.lat, r.lon], style).bindPopup(() => (r.el ||= Object.assign(document.createElement("div"), { innerHTML: popup(r) })), { maxWidth: 290, maxHeight: Math.max(260, $("map").clientHeight - 70), autoPanPadding: [10, 10] });
-    return { m, n };
+    return { m, n, r };
   });
   // opening "Everything we know" grows the popup; re-lay it out so it pans back into view
   map.on("popupopen", (e) => {
@@ -147,6 +147,10 @@
   document.querySelectorAll(".chips button").forEach((b) => b.addEventListener("click", () => show(Number(b.dataset.days))));
   map.fitBounds(L.latLngBounds(rows.map((r) => [r.lat, r.lon])), { padding: [8, 8] });
   show(0);
+  // ?p=<permit number> opens that pin, so a message can point at one building
+  const want = new URLSearchParams(location.search).get("p");
+  const hit = want && marks.find((x) => x.r.permit_no === want.toUpperCase());
+  if (hit) { map.setView(hit.m.getLatLng(), 16); hit.m.openPopup(); }
 })();
 </script>
 </body>
