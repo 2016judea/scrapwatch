@@ -14,6 +14,9 @@
 
 import { kvGet, kvPut } from "../lib/kv.js";
 import { summarize, toRow } from "../lib/core.js";
+// Who was in each commercial building, from Overture Places (open licence), built
+// by scripts/build_occupants.py. Not Google Places: see that script for why.
+import occupantsDoc from "../data/occupants.json" with { type: "json" };
 
 const REGISTER = "https://services.arcgis.com/afSMGVsC7QlRK1kZ/arcgis/rest/services/CCS_Permits/FeatureServer/0/query";
 const PARCELS = "https://gis.hennepin.us/arcgis/rest/services/HennepinData/LAND_PROPERTY/MapServer/1/query";
@@ -83,11 +86,12 @@ async function build() {
   if (cache.payload && Date.now() - cache.at < CACHE_MS) return cache.payload;
   const raw = await wreckingPermits();
   const { parcels, join } = await parcelsFor(raw.map((a) => a.APN));
-  const rows = raw.map((a) => toRow(a, parcels)).sort((a, b) => (a.issued < b.issued ? 1 : -1));
+  const rows = raw.map((a) => toRow(a, parcels, occupantsDoc.parcels)).sort((a, b) => (a.issued < b.issued ? 1 : -1));
   const payload = {
-    source: "City of Minneapolis permit register (Wrecking permits, cancelled left out) + Hennepin County parcels",
+    source: "City of Minneapolis permit register (Wrecking permits, cancelled left out) + Hennepin County parcels + Overture Maps Foundation Places (CDLA-Permissive-2.0)",
     fetched: new Date().toISOString(),
     parcel_join: { ...join, with_parcel: rows.filter((r) => r.parcel).length },
+    with_business: rows.filter((r) => r.was.length).length,
     totals: summarize(rows),
     rows,
   };

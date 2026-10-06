@@ -20,7 +20,8 @@ by recency and carry the counts.
 
 Tap a pin and it leads with what you act on: the address (a Google Maps link), the kind of
 building and how long ago the city said yes, year built, who is tearing it down, whether
-the permit is still open, and the city's one-line note on what the building was. Under
+the permit is still open, the city's one-line note on what the building was, the
+businesses listed on the lot (commercial only), and a "likely inside" guess. Under
 "Everything we know": permit number, dates, status and stage, job value, fees, units
 removed, neighborhood, ward, and the Hennepin County parcel as it stands today (use,
 market value, land and building value, lot size, last sale).
@@ -32,6 +33,19 @@ When the county's year built is the permit's year or later, the old building is 
 the parcel describes its replacement; the pin says "already rebuilt" instead of passing
 the new year off as the old one.
 
+**Was:** up to three businesses Overture Places lists on the parcel, for apartment and
+commercial permits only, and only while the county still shows the old building (once it
+shows a newer one, the listings are the new building's tenants). Built by
+`scripts/build_occupants.py` into `data/occupants.json` from Brick & Mortar's `businesses`
+export; re-run it after a new Overture release. Not Google Places: Google's terms forbid
+storing Places content beyond the place ID and showing it on a non-Google map, and this is
+a Leaflet map with a public repo. Overture is CDLA-Permissive-2.0 and Apache-2.0, credited
+in the map's attribution.
+
+**Likely inside:** a small rule table in `lib/core.js` (`INSIDE_RULES`, each rule with its
+reason) from the building type, the city's note, the businesses listed and the year built.
+The page labels it a guess.
+
 A permit means the city said yes, not that the building is still standing. Drive by
 first; ask the owner or the crew before you take anything. The page says so.
 
@@ -39,7 +53,8 @@ first; ask the owner or the crew before you take anything. The page says so.
 
 918 Wrecking permits not cancelled, Dec 2016 to Oct 2026: 673 houses and duplexes, 245
 apartment and commercial buildings. 90 in the last year, 8 in the last 30 days. A company
-named on 901. Parcel joined on 856. 916 have coordinates. The payload is 542 KB, 71 KB
+named on 901. Parcel joined on 856. A business listed on 71 (of 245 apartment and
+commercial permits; 108 parcels matched, the rest were already rebuilt). 916 have coordinates. The payload is 542 KB, 71 KB
 gzipped.
 
 ## How it runs

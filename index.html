@@ -37,6 +37,7 @@
   .p-when .new { color:var(--accent); }
   .p-line { margin:.1rem 0; }
   .p-what { margin:.3rem 0; font-style:italic; }
+  .p-guess { color:var(--mute); font-size:.82rem; }
   .p-warn { margin:.45rem 0 .2rem; color:var(--mute); font-size:.85rem; }
   details { margin-top:.35rem; border-top:1px solid var(--line); padding-top:.35rem; }
   summary { cursor:pointer; font-weight:600; font-size:.88rem; min-height:28px; display:flex; align-items:center; }
@@ -62,6 +63,7 @@
 (async () => {
   const $ = (id) => document.getElementById(id);
   const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const cat = (c) => String(c).replace(/_/g, " ");
   const money = (n) => "$" + Number(n).toLocaleString("en-US");
   const DAY = 864e5;
   const ageDays = (iso) => { const [y, m, d] = iso.split("-").map(Number); return Math.floor((Date.now() - Date.UTC(y, m - 1, d)) / DAY); };
@@ -72,7 +74,7 @@
   L.control.zoom({ position: "bottomright" }).addTo(map);
   // Esri's keyless light-gray canvas; Carto's light_all started answering "API KEY REQUIRED" (2026-10-06)
   L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}", {
-    maxZoom: 16, attribution: "Esri, HERE, OSM · City of Minneapolis · Hennepin County",
+    maxZoom: 16, attribution: "Esri, HERE, OSM · City of Minneapolis · Hennepin County · Overture Maps",
   }).addTo(map);
   L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Reference/MapServer/tile/{z}/{y}/{x}", { maxZoom: 16 }).addTo(map);
 
@@ -86,6 +88,8 @@
       r.completed ? `<div class="p-line">City closed the permit ${fmt(r.completed)}</div>` : `<div class="p-line">Permit still open${r.stage && r.stage !== r.status ? ` (${esc(r.stage.toLowerCase())})` : ""}</div>`,
       p.rebuilt ? `<div class="p-line">Already rebuilt: the county shows a building from ${p.rebuilt}</div>` : "",
       r.what ? `<div class="p-what">${esc(r.what)}</div>` : "",
+      r.was.length ? `<div class="p-line">Was: ${r.was.map((w) => `<b>${esc(w.name)}</b>${w.category ? ` (${esc(cat(w.category))})` : ""}`).join(", ")}</div>` : "",
+      r.inside ? `<div class="p-line">Likely inside: ${esc(r.inside.items.join(", "))} <span class="p-guess">(a guess for ${esc(r.inside.basis)})</span></div>` : "",
       `<div class="p-warn">Drive by first. Ask the owner or crew before you take anything.</div>`,
     ];
     const row = (k, v) => (v || v === 0) ? `<dt>${k}</dt><dd>${v}</dd>` : "";

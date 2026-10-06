@@ -1,0 +1,1013 @@
+{
+"_source": "Overture Maps Foundation, Places (CDLA-Permissive-2.0, Apache-2.0), via Brick & Mortar's businesses export, retrieved 2026-08-20",
+"parcels": {
+"0102824110110": [
+{
+"name": "O'Reilly Auto Parts",
+"category": "auto_parts_and_supply_store"
+}
+],
+"0102824120096": [
+{
+"name": "ACE Cash Express",
+"category": "check_cashing_payday_loans"
+},
+{
+"name": "Addis Ababa Ethiopian Restaurant and Bar",
+"category": "ethiopian_restaurant"
+},
+{
+"name": "Integrated Staffing Solutions",
+"category": "employment_agencies"
+}
+],
+"0102824120099": [
+{
+"name": "Michael J. Shoff",
+"category": "chiropractor"
+}
+],
+"0102824120104": [
+{
+"name": "United States Postal Service",
+"category": "post_office"
+},
+{
+"name": "Cayo",
+"category": "community_services_non_profits"
+},
+{
+"name": "Post Office Minnehaha Station",
+"category": "post_office"
+}
+],
+"0202824210197": [
+{
+"name": "U.S. Bank",
+"category": "mortgage_broker"
+},
+{
+"name": "U.S. Bank-Ilyas Bouramdane-Mortgage Loan Officer",
+"category": "mortgage_lender"
+},
+{
+"name": "U.S. Bank-Mortgage Loan Officer-Rackson Legon Rodriguez",
+"category": "bank_credit_union"
+}
+],
+"0202824220191": [
+{
+"name": "African Hair Braiding",
+"category": "freight_and_cargo_service"
+},
+{
+"name": "Mirasol Express Lake",
+"category": "electronics"
+},
+{
+"name": "Lupita-fitmom",
+"category": "gym"
+}
+],
+"0202824440071": [
+{
+"name": "Southside Farm Store",
+"category": "nursery_and_gardening"
+}
+],
+"0302824240015": [
+{
+"name": "UPS Access Point Locker",
+"category": "post_office"
+},
+{
+"name": "Western Union",
+"category": "money_transfer_services"
+}
+],
+"0302824310170": [
+{
+"name": "Rongo's Auto Service",
+"category": "automotive_repair"
+},
+{
+"name": "Family Dollar",
+"category": "discount_store"
+},
+{
+"name": "O'Reilly Auto Parts",
+"category": "auto_parts_and_supply_store"
+}
+],
+"0402824110183": [
+{
+"name": "SuperAmerica",
+"category": ""
+},
+{
+"name": "Blue Rhino Propane Exchange",
+"category": "propane_supplier"
+},
+{
+"name": "F-bom bikes",
+"category": "shopping"
+}
+],
+"0402824120220": [
+{
+"name": "Cb2",
+"category": "home_decor"
+},
+{
+"name": "Bremer Bank - Closed",
+"category": "bank_credit_union"
+},
+{
+"name": "Clear Internet Sales",
+"category": "telecommunications"
+}
+],
+"0402824210185": [
+{
+"name": "Brunner Carolyn Psychtrpst",
+"category": "psychologist"
+},
+{
+"name": "Capistrant & Associates PA",
+"category": "lawyer"
+},
+{
+"name": "Daniel W Voss Law Office",
+"category": "lawyer"
+}
+],
+"0402924220148": [
+{
+"name": "Chocolate City Hair Designs",
+"category": "hair_replacement"
+},
+{
+"name": "Community Care Clinic  - Minnesota",
+"category": "walk_in_clinic"
+}
+],
+"0402924220149": [
+{
+"name": "Sustainable Home Program",
+"category": "financial_service"
+}
+],
+"0502824210226": [
+{
+"name": "BP",
+"category": "car_wash"
+},
+{
+"name": "Waterbury Restaurant",
+"category": "restaurant"
+},
+{
+"name": "Calhoun Beach BP",
+"category": "gas_station"
+}
+],
+"0502924440107": [
+{
+"name": "Penn Food Mart",
+"category": "gas_station"
+},
+{
+"name": "Gas Stop",
+"category": ""
+}
+],
+"0602823220164": [
+{
+"name": "Walgreens",
+"category": "drugstore"
+},
+{
+"name": "Connections Academy",
+"category": "elementary_school"
+},
+{
+"name": "WALGREENS #16279",
+"category": "money_transfer_services"
+}
+],
+"0702823340141": [
+{
+"name": "Bell Pharmaceuticals",
+"category": "advertising_agency"
+}
+],
+"1002924410180": [
+{
+"name": "The Buttered Tin",
+"category": "breakfast_and_brunch_restaurant"
+},
+{
+"name": "Violet Wine",
+"category": "shopping"
+},
+{
+"name": "HUM Yoga + Barre",
+"category": "yoga_studio"
+}
+],
+"1102924230100": [
+{
+"name": "Klash Drums",
+"category": "guitar_store"
+}
+],
+"1102924430078": [
+{
+"name": "The Whim",
+"category": "party_and_event_planning"
+},
+{
+"name": "Kapra cosmetics",
+"category": "commercial_industrial"
+}
+],
+"1202824120240": [
+{
+"name": "3828 Apartments",
+"category": "rental_service"
+}
+],
+"1302824140033": [
+{
+"name": "Nokomis Service",
+"category": "automotive_repair"
+}
+],
+"1302824220036": [
+{
+"name": "Lunds and Byerlys Nokomis",
+"category": "grocery_store"
+},
+{
+"name": "NOKOMIS",
+"category": "grocery_store"
+},
+{
+"name": "Bergans Super Valu",
+"category": "grocery_store"
+}
+],
+"1302924430035": [
+{
+"name": "Prospect Foundry, LLC",
+"category": "industrial_equipment"
+}
+],
+"1302924430051": [
+{
+"name": "Hoover Wheel Alignment",
+"category": "automotive_repair"
+}
+],
+"1502924110165": [
+{
+"name": "U-Haul Neighborhood Dealer",
+"category": "storage_facility"
+}
+],
+"1502924110195": [
+{
+"name": "Ollu Self Serve Dogwash & Grooming Salon",
+"category": "pet_groomer"
+},
+{
+"name": "Ace Mailing",
+"category": "shipping_center"
+},
+{
+"name": "Blumentals Architecture",
+"category": "architectural_designer"
+}
+],
+"1502924210019": [
+{
+"name": "Holiday Stationstores",
+"category": "convenience_store"
+},
+{
+"name": "Redbox",
+"category": "video_and_video_game_rentals"
+}
+],
+"1502924240081": [
+{
+"name": "Broadway Pizza",
+"category": "pizza_restaurant"
+}
+],
+"1502924310113": [
+{
+"name": "Northern Metal Recycling Scrappy's",
+"category": "recycling_center"
+}
+],
+"1502924310135": [
+{
+"name": "Public Storage",
+"category": "self_storage_facility"
+},
+{
+"name": "Tell Academy",
+"category": "elementary_school"
+}
+],
+"1602924130145": [
+{
+"name": "Pizza Hut",
+"category": "pizza_restaurant"
+},
+{
+"name": "mr pizza n wingz",
+"category": "chicken_wings_restaurant"
+}
+],
+"1602924130152": [
+{
+"name": "Hungry Howies Pizza",
+"category": "pizza_restaurant"
+}
+],
+"1602924140168": [
+{
+"name": "Peace Of Hope",
+"category": "jail_and_prison"
+}
+],
+"1602924140196": [
+{
+"name": "Bamba Professional African Hair Braiding",
+"category": "hair_salon"
+},
+{
+"name": "Flora's Hair Design",
+"category": "beauty_salon"
+}
+],
+"1602924140238": [
+{
+"name": "Redking Foods Llc",
+"category": "restaurant"
+}
+],
+"1602924240166": [
+{
+"name": "O'Reilly Auto Parts",
+"category": "auto_parts_and_supply_store"
+}
+],
+"1602924310001": [
+{
+"name": "North Commons Water Park",
+"category": "water_park"
+}
+],
+"1702924110038": [
+{
+"name": "Amazing Oriental",
+"category": "grocery_store"
+}
+],
+"1802823120043": [
+{
+"name": "ARYA",
+"category": "coffee_shop"
+}
+],
+"1802823120082": [
+{
+"name": "The Shale",
+"category": "apartments"
+}
+],
+"1802823120084": [
+{
+"name": "Holiday Car Wash",
+"category": "car_wash"
+},
+{
+"name": "Holiday Stationstores",
+"category": "convenience_store"
+},
+{
+"name": "Blue Rhino Propane Exchange",
+"category": "propane_supplier"
+}
+],
+"1802923430041": [
+{
+"name": "Sears Outlet",
+"category": "appliance_store"
+}
+],
+"1902823110236": [
+{
+"name": "Rick's Coffee Bar",
+"category": "coffee_shop"
+},
+{
+"name": "Every Third Saturday",
+"category": "community_services_non_profits"
+},
+{
+"name": "Southside Automotive",
+"category": "auto_parts_and_supply_store"
+}
+],
+"2002924110020": [
+{
+"name": "New Life Ministry",
+"category": "church_cathedral"
+}
+],
+"2102924110069": [
+{
+"name": "United Faith Pentecostal Church",
+"category": "church_cathedral"
+}
+],
+"2102924110119": [
+{
+"name": "V3 Sports",
+"category": "fitness_trainer"
+},
+{
+"name": "ASF Store Fixtures",
+"category": "furniture_store"
+},
+{
+"name": "Soul Bowl",
+"category": "soul_food"
+}
+],
+"2102924430122": [
+{
+"name": "ML Beasley Roofing, Inc.",
+"category": "roofing"
+}
+],
+"2102924440013": [
+{
+"name": "Curious",
+"category": "marketing_agency"
+},
+{
+"name": "FirstService Residential",
+"category": "property_management"
+}
+],
+"2202824230202": [
+{
+"name": "aqua city motel",
+"category": "motel"
+}
+],
+"2202824340122": [
+{
+"name": "Extra Space Storage",
+"category": "self_storage_facility"
+}
+],
+"2202924140066": [
+{
+"name": "Digital Coordination",
+"category": ""
+}
+],
+"2202924140068": [
+{
+"name": "The Foundry Home Goods",
+"category": "furniture_store"
+}
+],
+"2202924330047": [
+{
+"name": "Xcel Energy Chestnut Service Center",
+"category": "real_estate_agent"
+}
+],
+"2302924110309": [
+{
+"name": "Holiday Car Wash",
+"category": "car_wash"
+},
+{
+"name": "Holiday Stationstores",
+"category": "convenience_store"
+},
+{
+"name": "CIRCLE K #2746468",
+"category": "money_transfer_services"
+}
+],
+"2302924110310": [
+{
+"name": "White Castle",
+"category": "fast_food_restaurant"
+},
+{
+"name": "Redbox",
+"category": "rental_kiosks"
+}
+],
+"2302924120248": [
+{
+"name": "European Wax Center",
+"category": "waxing"
+},
+{
+"name": "Hotworx",
+"category": "gym"
+},
+{
+"name": "NE 1 Dental",
+"category": ""
+}
+],
+"2302924120250": [
+{
+"name": "U.S. Bank",
+"category": "banks"
+},
+{
+"name": "Consulate of Ecuador",
+"category": "embassy"
+},
+{
+"name": "Financial Advisors | U.S. Bancorp Investments",
+"category": "financial_service"
+}
+],
+"2402924110152": [
+{
+"name": "Como Imports",
+"category": "automotive_services_and_repair"
+},
+{
+"name": "Local 15",
+"category": "community_services_non_profits"
+}
+],
+"2402924310095": [
+{
+"name": "Neighborhood Tattoo",
+"category": "tattoo_and_piercing"
+}
+],
+"2402924420035": [
+{
+"name": "Chatime",
+"category": "coffee_shop"
+}
+],
+"2402924420184": [
+{
+"name": "India Kitchen Inc",
+"category": "restaurant"
+},
+{
+"name": "Top Ten Liquors Minneapolis",
+"category": "liquor_store"
+},
+{
+"name": "Five Guys",
+"category": "burger_restaurant"
+}
+],
+"2502924320129": [
+{
+"name": "Rajo Home Health Care,llc",
+"category": "home_health_care"
+},
+{
+"name": "West Bank School of Music",
+"category": "music_school"
+}
+],
+"2502924330159": [
+{
+"name": "Max It PAWN",
+"category": "pawn_shop"
+},
+{
+"name": "EZPAWN",
+"category": "pawn_shop"
+}
+],
+"2602924230147": [
+{
+"name": "Wells Fargo Bank",
+"category": "bank_credit_union"
+}
+],
+"2702924310262": [
+{
+"name": "Viviana's Music Studio",
+"category": "elementary_school"
+},
+{
+"name": "Maker's Liquor Store",
+"category": "liquor_store"
+}
+],
+"2702924310263": [
+{
+"name": "Sonora Mexican Kitchen and Bar",
+"category": "mexican_restaurant"
+},
+{
+"name": "Nail Cops",
+"category": "nail_salon"
+},
+{
+"name": "Market Bar-b-que Corporation",
+"category": "restaurant"
+}
+],
+"2702924430210": [
+{
+"name": "Loring-nicollet High",
+"category": "high_school"
+}
+],
+"2802924440544": [
+{
+"name": "Bradstreet Neighborhood Crafthouse",
+"category": "american_restaurant"
+},
+{
+"name": "UMAMI by Travail Kitchen & Amusements",
+"category": "asian_restaurant"
+}
+],
+"2902924410039": [
+{
+"name": "Joffe Medicenter",
+"category": "laser_eye_surgery_lasik"
+},
+{
+"name": "Karen A. Heuer, M.d., P.c.",
+"category": "laser_eye_surgery_lasik"
+}
+],
+"3002923130052": [
+{
+"name": "Family Focus",
+"category": "charity_organization"
+},
+{
+"name": "WorkAround: Shared Office Environment",
+"category": "coworking_space"
+}
+],
+"3002923130110": [
+{
+"name": "The Pillars Child Care",
+"category": "home_service"
+},
+{
+"name": "The Pillars of Prospect Park",
+"category": "retirement_home"
+}
+],
+"3002923130111": [
+{
+"name": "Harris Machinery Co",
+"category": "restaurant"
+},
+{
+"name": "The Market At Malcolm Yards",
+"category": "restaurant"
+},
+{
+"name": "Joey Meatballs",
+"category": "italian_restaurant"
+}
+],
+"3002923130112": [
+{
+"name": "BNSF Railway",
+"category": "railroad_freight"
+}
+],
+"3002923220009": [
+{
+"name": "Kowloon Restaurant",
+"category": "chinese_restaurant"
+},
+{
+"name": "Sport Clips Haircuts of Stadium Village Plaza U of M",
+"category": "hair_stylist"
+}
+],
+"3002923230154": [
+{
+"name": "Huron Estates",
+"category": "real_estate_service"
+}
+],
+"3002923410021": [
+{
+"name": "Asphalt Driveway Co.",
+"category": "corporate_office"
+}
+],
+"3302924110193": [
+{
+"name": "Visionary Optical",
+"category": "shopping"
+}
+],
+"3302924130204": [
+{
+"name": "Ella Baker Global Studies and Humanities",
+"category": "public_school"
+},
+{
+"name": "Jefferson Elementary",
+"category": "elementary_school"
+}
+],
+"3402924330124": [
+{
+"name": "We. Artist Collective, Studios & Gallery",
+"category": "art_gallery"
+}
+],
+"3402924330213": [
+{
+"name": "Cali Nails",
+"category": "nail_salon"
+}
+],
+"3402924340295": [
+{
+"name": "Plaza Mexico",
+"category": "shopping_center"
+},
+{
+"name": "Karmel Market",
+"category": "shopping_center"
+},
+{
+"name": "Miller Towing",
+"category": "towing_service"
+}
+],
+"3402924340303": [
+{
+"name": "Karmel Community Prayer Center",
+"category": "religious_organization"
+},
+{
+"name": "Karmel Halal Market",
+"category": "specialty_foods"
+},
+{
+"name": "Fortune Relief And Youth Empowerment Organization",
+"category": "charity_organization"
+}
+],
+"3402924340304": [
+{
+"name": "Al Hussein Perfumes & Beauty Inc",
+"category": "perfume_store"
+},
+{
+"name": "Msp Airport Taxi Cab Minneapolis & Msp Chauffeur Service & Black Suv & Town Car Service",
+"category": "taxi_service"
+},
+{
+"name": "Cricket Wireless",
+"category": "telecommunications_company"
+}
+],
+"3402924420373": [
+{
+"name": "Healthcare Chiropractic Clinic",
+"category": "chiropractor"
+},
+{
+"name": "Q O Raxey Home Health Care",
+"category": "home_health_care"
+},
+{
+"name": "USA Home Services",
+"category": "financial_service"
+}
+],
+"3402924420499": [
+{
+"name": "Simpson Housing Services",
+"category": ""
+},
+{
+"name": "Iglesia Piedra Viva",
+"category": "church_cathedral"
+},
+{
+"name": "Simpson Center for Servant Ministries",
+"category": "religious_organization"
+}
+],
+"3402924430035": [
+{
+"name": "Quality Tobacco",
+"category": "tobacco_shop"
+}
+],
+"3402924430036": [
+{
+"name": "Money Express Check Cashing Service",
+"category": "financial_service"
+}
+],
+"3502924120293": [
+{
+"name": "Native American Community Clinic",
+"category": "family_practice"
+},
+{
+"name": "Maria's Cafe",
+"category": "cafe"
+},
+{
+"name": "Da Ga",
+"category": "motorcycle_repair"
+}
+],
+"3502924330035": [
+{
+"name": "Uncle Hugo's Science Fiction Bookstore & Uncle Edgar's Mystery Bookstore",
+"category": "bookstore"
+}
+],
+"3502924330104": [
+{
+"name": "Chicago Ave S & Chicago Lake TRANSIT Gate C",
+"category": "bus_station"
+},
+{
+"name": "Bismillah Grocery Store LLC",
+"category": "grocery_store"
+}
+],
+"3502924330106": [
+{
+"name": "Seafood To Go",
+"category": "restaurant"
+},
+{
+"name": "U2 Nails",
+"category": "nail_salon"
+}
+],
+"3502924330107": [
+{
+"name": "Bling Bling Fashion & Beauty Supply",
+"category": "beauty_product_supplier"
+}
+],
+"3502924330124": [
+{
+"name": "Popeyes",
+"category": "fast_food_restaurant"
+},
+{
+"name": "KFC",
+"category": "chicken_restaurant"
+}
+],
+"3502924340042": [
+{
+"name": "Admas Travel",
+"category": "travel_agents"
+}
+],
+"3502924340126": [
+{
+"name": "Foot Locker",
+"category": "shoe_store"
+},
+{
+"name": "T-Mobile",
+"category": "mobile_phone_store"
+},
+{
+"name": "Vans",
+"category": "shoe_store"
+}
+],
+"3502924340134": [
+{
+"name": "The Commons",
+"category": "commercial_real_estate"
+},
+{
+"name": "Midtown Exchange",
+"category": "apartments"
+},
+{
+"name": "Gigis Super Braid Factory",
+"category": "hair_salon"
+}
+],
+"3602924220120": [
+{
+"name": "Soomaal House of Art",
+"category": "art_gallery"
+},
+{
+"name": "The Beez Kneez, Llc",
+"category": "honey_farm_shop"
+},
+{
+"name": "Solcana Crossfit",
+"category": "arts_and_entertainment"
+}
+],
+"3602924330037": [
+{
+"name": "Smith Foundry Company Inc.",
+"category": "metal_fabricator"
+}
+],
+"3602924340074": [
+{
+"name": "H&R Block",
+"category": "trusts"
+},
+{
+"name": "Pineda Tacos",
+"category": "mexican_restaurant"
+},
+{
+"name": "T-Mobile",
+"category": "telecommunications_company"
+}
+],
+"3602924420005": [
+{
+"name": "Hexagon Bar",
+"category": "bar"
+}
+],
+"3602924420017": [
+{
+"name": "Schubert & Hoey Outdoor Advertising",
+"category": "advertising_agency"
+}
+],
+"3602924430048": [
+{
+"name": "Domino's Pizza",
+"category": "pizza_delivery_service"
+}
+],
+"3602924430060": [
+{
+"name": "AutoZone",
+"category": "auto_parts_and_supply_store"
+}
+],
+"3602924430103": [
+{
+"name": "GM Tobacco",
+"category": "tobacco_shop"
+},
+{
+"name": "Wendy's",
+"category": "fast_food_restaurant"
+}
+],
+"3602924440187": [
+{
+"name": "EZPAWN",
+"category": "jewelry_store"
+},
+{
+"name": "maX it PAWN",
+"category": "pawn_shop"
+}
+],
+"3602924440192": [
+{
+"name": "U.S. Bank Branch",
+"category": "bank_credit_union"
+},
+{
+"name": "Financial Advisors | US Bancorp Investments",
+"category": "financial_service"
+}
+]
+}
+}
