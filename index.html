@@ -88,7 +88,7 @@
       r.completed ? `<div class="p-line">City closed the permit ${fmt(r.completed)}</div>` : `<div class="p-line">Permit still open${r.stage && r.stage !== r.status ? ` (${esc(r.stage.toLowerCase())})` : ""}</div>`,
       p.rebuilt ? `<div class="p-line">Already rebuilt: the county shows a building from ${p.rebuilt}</div>` : "",
       r.what ? `<div class="p-what">${esc(r.what)}</div>` : "",
-      r.was.length ? `<div class="p-line">Was: ${r.was.map((w) => `<b>${esc(w.name)}</b>${w.category ? ` (${esc(cat(w.category))})` : ""}`).join(", ")}</div>` : "",
+      (r.was || []).length ? `<div class="p-line">Was: ${r.was.map((w) => `<b>${esc(w.name)}</b>${w.category ? ` (${esc(cat(w.category))})` : ""}`).join(", ")}</div>` : "",
       r.inside ? `<div class="p-line">Likely inside: ${esc(r.inside.items.join(", "))} <span class="p-guess">(a guess for ${esc(r.inside.basis)})</span></div>` : "",
       `<div class="p-warn">Drive by first. Ask the owner or crew before you take anything.</div>`,
     ];
@@ -111,7 +111,7 @@
 
   let rows = [];
   try {
-    const r = await fetch("/api/scrapwatch?map=1");
+    const r = await fetch("/api/scrapwatch?map=3");
     const d = await r.json();
     if (!r.ok) throw new Error(d.error);
     rows = d.rows.filter((x) => x.lat && x.lon);
