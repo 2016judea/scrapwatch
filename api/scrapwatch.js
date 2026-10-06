@@ -217,12 +217,16 @@ async function check(req, res) {
       try { await sendMail({ to: sub.email, ...mail }); mailed += 1; }
       catch (e) { failures.push({ id: sub.id, error: e.message }); }
     }
-    await kvPut(SEEN_KEY, [...new Set([...seen, ...fresh.map(rowKey)])]);
+    // Mailgun's plan caps the whole brickandmortar.dev domain at 100 requests a
+    // day, shared with every other sender on it (hit 2026-10-06). If no mail got
+    // out, leave the rows unseen so tomorrow's run sends them instead of dropping them.
+    const allFailed = failures.length && !mailed;
+    if (!allFailed) await kvPut(SEEN_KEY, [...new Set([...seen, ...fresh.map(rowKey)])]);
   }
   const log = {
     date: today, baseline: false, seen: seen.length, new: fresh.length,
     new_permits: fresh.slice(0, 50).map((r) => r.permit_no),
-    subscribers: subs.length, mailed, failures,
+    subscribers: subs.length, mailed, failures, held_for_retry: Boolean(fresh.length && failures.length && !mailed),
     source_newest: summarize(rows).newest,
   };
   await kvPut(`log:${today}`, log); await kvPut("log:latest", log);
