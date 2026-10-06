@@ -1,71 +1,71 @@
 # Demolition Notice
 
-A free email the morning a building in Minneapolis gets a demolition permit: the address,
-the company tearing it down, and a map link.
+A map of every building the City of Minneapolis has okayed for demolition, and everything
+the public record says about it, for the people who make a living on what comes out first.
 
-Live at **demolition-notice.vercel.app** (scrapwatch.vercel.app still serves). (The repo kept its old name, scrapwatch.)
+Live at **demolition-notice.vercel.app** (scrapwatch.vercel.app still serves). The repo kept
+its old name, scrapwatch.
 
 ## Who it's for
 
-People who make a living on what comes out of a building before and during a teardown:
-scrappers pulling copper wiring, junk haulers, salvage pickers after furnaces, AC units,
+Scrappers pulling copper wiring, junk haulers, salvage pickers after furnaces, AC units,
 water heaters, appliances and fixtures. Their scarce input is knowing *which* building is
-coming down *this week*. The city already announces it, in a permit list nobody reads.
+coming down. The city already announces it, in a permit list nobody reads.
 
-## Where it came from
+## What is on the map
 
-Aidan, digging through Minneapolis permits for a client, looking for new restaurants:
-the city issues a "demolition permit" (the register calls it *Wrecking*) when a building is
-about to be knocked down. Which means scrap metal, copper, used HVAC. And there are people
-who make a living doing junk arbitrage. They are the customer.
+One pin per Wrecking permit in the city register (2016 on; cancelled permits left out).
+Last 30 days: big orange-red. Last year: amber. Older: small and grey. Three chips filter
+by recency and carry the counts.
 
-## What one alert row carries
+Tap a pin and it leads with what you act on: the address (a Google Maps link), the kind of
+building and how long ago the city said yes, year built, who is tearing it down, whether
+the permit is still open, and the city's one-line note on what the building was. Under
+"Everything we know": permit number, dates, status and stage, job value, fees, units
+removed, neighborhood, ward, and the Hennepin County parcel as it stands today (use,
+market value, land and building value, lot size, last sale).
 
-Kind (house, duplex, apartment building, commercial building), address, neighborhood,
-year built (Hennepin County parcel layer, when the county has it), the wrecking company
-(only when the applicant reads as a company; a homeowner's name is never shown), the
-day the permit was issued, a one-line note on what the building was when the city wrote
-one ("Convenience store", "Prospect Foundry building"), and a Google Maps link.
+Never a person's name. The applicant shows only when it reads as a company; the
+register's `fullName` and the county's owner and taxpayer fields are never requested.
 
-A permit means the city said yes. It does not mean the building is still standing; some
-come down the same week. The page and every email say so, and say to ask the owner or
-the crew before taking anything.
+When the county's year built is the permit's year or later, the old building is gone and
+the parcel describes its replacement; the pin says "already rebuilt" instead of passing
+the new year off as the old one.
+
+A permit means the city said yes, not that the building is still standing. Drive by
+first; ask the owner or the crew before you take anything. The page says so.
 
 ## The numbers (measured 2026-10-06 off the live register)
 
-90 Wrecking permits in the last 365 days, none cancelled: 63 houses and duplexes,
-27 apartment and commercial buildings. 8 in the last 30 days. Year built joined on 68
-of 90. A company named on 89 of 90.
+918 Wrecking permits not cancelled, Dec 2016 to Oct 2026: 673 houses and duplexes, 245
+apartment and commercial buildings. 90 in the last year, 8 in the last 30 days. A company
+named on 901. Parcel joined on 856. 916 have coordinates. The payload is 542 KB, 71 KB
+gzipped.
 
 ## How it runs
 
-- **Source:** the City of Minneapolis permit register (ArcGIS `CCS_Permits`, no key),
-  `permitType='Wrecking' AND status<>'Cancelled'`, last 365 days, read directly by the
-  function. Year built: Hennepin `LAND_PROPERTY/MapServer/1` by APN in batches of 150;
-  if the county is down the alert still goes without the year. Field notes and traps:
-  the `mpls-permits` skill. (Until 2026-10-06 this read the Brick & Mortar platform
-  export, which stopped refreshing when its permits job was disabled 2026-10-02.)
-- **One function**, `api/scrapwatch.js`, routed by `?action=`: `feed`, `subscribe`,
-  `unsubscribe`, `check` (the cron), `status`.
-- **Storage:** Cloudflare Workers KV over REST (namespace `SCRAPWATCH`). Keys: `sub:<id>`,
-  `seen:mpls-wrecking`, `log:<date>`, `log:latest`. (`seen` is the retired source's set.)
-- **Mail:** Mailgun on `brickandmortar.dev`, plain text, hyphens not em dashes, unsubscribe
-  link in every message.
-- **Cron:** daily at 13:00 UTC (`vercel.json`). The first run on a source **baselines** and
-  mails nothing; after that a subscriber gets only new rows of the kinds they picked
-  (`house`, `big`). Subscribers from the old product carry no kinds and get everything.
-- **CORS:** `subscribe` and `feed` allow brickandmortar.dev, whose `trade` role carries the
-  sign-up card. Old payloads (`city`, `signals`) are accepted and sign up for everything.
-- **Counting signups:** `GET /api/scrapwatch?action=status` with `Authorization: Bearer $CRON_SECRET`.
+- **Page:** `index.html`, Leaflet from cdnjs on Esri's keyless light-gray tiles (Carto's
+  `light_all` answered "API KEY REQUIRED" on 2026-10-06). Canvas markers, no clustering:
+  918 circles draw fine on a phone and clusters would hide the recency colours.
+- **Data:** one function, `api/scrapwatch.js`. It reads the City of Minneapolis permit
+  register (ArcGIS `CCS_Permits`, no key) on request and joins Hennepin
+  `LAND_PROPERTY/MapServer/1` by APN. Vercel's edge holds the answer an hour
+  (`s-maxage=3600`, `stale-while-revalidate=86400`), so the register is read about once an
+  hour and a phone gets a cached response.
+- **Parcel cache:** Cloudflare Workers KV over REST (namespace `SCRAPWATCH`), key
+  `parcels:v1`. Only APNs not already cached are asked of the county, because the county
+  answered a laptop and failed Vercel on the same afternoon. Delete the key to refresh
+  values. Field notes and traps: the `mpls-permits` skill.
 
 Local: `node scripts/serve_local.mjs 4180` loads `.env` and serves the page and the function.
 Tests: `npm test`.
 
-Free. No Stripe.
+Free. No email, no sign-up, no Stripe.
 
 ## History
 
-Built 2026-09-07 as Scrapwatch, an alert for transformer and switchgear refurbishers off
-commercial teardowns and Saint Paul electrical permits. Rebuilt 2026-10-06 as Demolition
-Notice for the junk-arbitrage customer, every Minneapolis wrecking permit, houses included.
-The dealer and contractor drafts in `drafts/` belong to the old product.
+Built 2026-09-07 as Scrapwatch, an email alert for transformer and switchgear refurbishers.
+Rebuilt 2026-10-06 as Demolition Notice, an email alert for every Minneapolis wrecking
+permit; the same day Aidan dropped the email entirely and made the page just a map. One
+sign-up record from the alert sits untouched in KV (`sub:*`) and nothing reads it. The
+dealer and contractor drafts in `drafts/` belong to the first product.

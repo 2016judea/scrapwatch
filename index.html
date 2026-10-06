@@ -2,134 +2,147 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Demolition Notice</title>
-<meta name="description" content="A building in Minneapolis is getting knocked down. Get the address and who is doing the job, the morning the city says yes. Free email for scrappers and junk haulers.">
+<meta name="description" content="Every building the City of Minneapolis has okayed for demolition, on one map. Address, who is tearing it down, year built, and the county record. For scrappers and junk haulers.">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
 <style>
-  :root { --ink:#151515; --mute:#5e5e5e; --line:#dedad2; --paper:#f8f6f1; --card:#fff; --accent:#c2410c; --tag:#efe9df; --big:#e3eaf3; }
+  :root { --ink:#151515; --mute:#5e5e5e; --line:#dedad2; --paper:#f8f6f1; --accent:#c2410c; --year:#f59e0b; --old:#8a8178; }
   * { box-sizing:border-box; }
-  html { color-scheme: light; }
-  body { margin:0; background:var(--paper); color:var(--ink); font:17px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
-  main { max-width:36rem; margin:0 auto; padding:1.5rem 1rem 4rem; }
-  .brand { font-weight:800; letter-spacing:.04em; text-transform:uppercase; font-size:.85rem; margin-bottom:1.25rem; display:flex; align-items:center; gap:.5rem; }
-  .brand i { width:.75rem; height:.75rem; background:var(--accent); display:inline-block; border-radius:2px; }
-  h1 { font-size:1.9rem; line-height:1.12; margin:0 0 .7rem; letter-spacing:-.015em; }
-  h2 { font-size:.95rem; margin:2.25rem 0 .6rem; text-transform:uppercase; letter-spacing:.06em; color:var(--mute); }
-  p { margin:0 0 .9rem; }
-  .lede { font-size:1.1rem; }
-  form { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:1rem; margin:1rem 0 0; }
-  input[type=email] { width:100%; font:inherit; font-size:16px; padding:.75rem .8rem; border:1px solid #bbb; border-radius:8px; background:#fff; }
-  .checks { display:flex; gap:.5rem 1.1rem; flex-wrap:wrap; margin:.8rem 0 0; }
-  .checks label { display:flex; align-items:center; gap:.45rem; font-weight:500; min-height:44px; }
-  .checks input { width:1.2rem; height:1.2rem; }
-  button { width:100%; margin-top:.6rem; font:inherit; font-weight:700; padding:.9rem; border:0; border-radius:8px; background:var(--accent); color:#fff; cursor:pointer; }
-  button:disabled { opacity:.6; }
-  .msg { margin-top:.7rem; min-height:1.4rem; font-weight:500; }
-  .msg.err { color:#a11; }
-  .msg:empty { display:none; }
-  .fine { color:var(--mute); font-size:.92rem; }
-  .stats { display:grid; grid-template-columns:1fr 1fr; gap:.6rem; }
-  .stat { background:var(--card); border:1px solid var(--line); border-radius:10px; padding:.7rem .85rem; }
-  .stat b { display:block; font-size:1.6rem; line-height:1.1; }
-  .stat span { color:var(--mute); font-size:.88rem; }
-  ul.rows { list-style:none; margin:.9rem 0 0; padding:0; border-top:1px solid var(--line); }
-  ul.rows li { padding:.85rem 0; border-bottom:1px solid var(--line); }
-  .row1 { display:flex; gap:.55rem; align-items:baseline; flex-wrap:wrap; }
-  .tag { font-size:.72rem; font-weight:700; letter-spacing:.05em; text-transform:uppercase; background:var(--tag); padding:.15rem .45rem; border-radius:4px; }
-  .tag.big { background:var(--big); }
-  .date { color:var(--mute); font-variant-numeric:tabular-nums; font-size:.9rem; }
-  .addr { font-weight:650; font-size:1.05rem; }
-  .addr a { text-decoration:none; }
-  .addr a::after { content:" ↗"; color:var(--mute); font-weight:400; font-size:.85em; }
-  .who { color:var(--mute); font-size:.95rem; overflow-wrap:anywhere; }
-  ol.how { padding-left:1.2rem; margin:0; }
-  ol.how li { margin:0 0 .45rem; }
-  footer { margin-top:2.75rem; color:var(--mute); font-size:.9rem; }
-  a { color:inherit; }
-  @media (min-width:620px) { main { padding-top:2.5rem; } h1 { font-size:2.5rem; } .stats { grid-template-columns:repeat(4,1fr); } }
+  html, body { margin:0; height:100%; overflow:hidden; background:var(--paper); color:var(--ink);
+    font:15px/1.4 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+  body { display:flex; flex-direction:column; height:100dvh; }
+  header { flex:none; display:flex; align-items:center; gap:.5rem; padding:.5rem .75rem; padding-top:max(.5rem, env(safe-area-inset-top));
+    background:var(--paper); border-bottom:1px solid var(--line); z-index:2; }
+  .brand { font-weight:800; letter-spacing:.04em; text-transform:uppercase; font-size:.8rem; display:flex; align-items:center; gap:.4rem; white-space:nowrap; }
+  .brand i { width:.7rem; height:.7rem; background:var(--accent); display:inline-block; border-radius:2px; }
+  .chips { margin-left:auto; display:flex; gap:.3rem; }
+  .chips button { font:inherit; font-size:.78rem; font-weight:600; border:1px solid var(--line); background:#fff; color:var(--ink);
+    border-radius:999px; padding:.35rem .6rem; min-height:34px; cursor:pointer; display:flex; align-items:center; gap:.3rem; white-space:nowrap; }
+  .chips button[aria-pressed=true] { background:var(--ink); color:#fff; border-color:var(--ink); }
+  @media (max-width:400px) { .chips button { padding:.35rem .5rem; gap:.25rem; } .chips { gap:.25rem; } .brand { font-size:.74rem; } header { gap:.35rem; padding-left:.6rem; padding-right:.6rem; } }
+  .dot { width:.55rem; height:.55rem; border-radius:50%; display:inline-block; }
+  #map { flex:1; min-height:0; }
+  footer { flex:none; font-size:.75rem; color:var(--mute); padding:.35rem .75rem; padding-bottom:max(.35rem, env(safe-area-inset-bottom));
+    background:var(--paper); border-top:1px solid var(--line); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  #status { position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); z-index:500; background:#fff; padding:.6rem .9rem;
+    border-radius:8px; border:1px solid var(--line); font-weight:600; }
+  #status:empty { display:none; }
+  .leaflet-popup-content { margin:.75rem .85rem; font-size:14px; line-height:1.4; }
+  .leaflet-popup-content-wrapper { border-radius:10px; }
+  .leaflet-popup-content a.p-addr { color:var(--ink); }
+  .p-addr { font-weight:700; font-size:1.05rem; display:block; color:var(--ink); text-decoration:none; }
+  .p-addr::after { content:" ↗"; color:var(--mute); font-weight:400; }
+  .p-when { font-weight:600; margin:.15rem 0 .35rem; }
+  .p-when .new { color:var(--accent); }
+  .p-line { margin:.1rem 0; }
+  .p-what { margin:.3rem 0; font-style:italic; }
+  .p-warn { margin:.45rem 0 .2rem; color:var(--mute); font-size:.85rem; }
+  details { margin-top:.35rem; border-top:1px solid var(--line); padding-top:.35rem; }
+  summary { cursor:pointer; font-weight:600; font-size:.88rem; min-height:28px; display:flex; align-items:center; }
+  dl { display:grid; grid-template-columns:auto 1fr; gap:.15rem .6rem; margin:.3rem 0 0; font-size:.85rem; }
+  dt { color:var(--mute); } dd { margin:0; }
+  dl h4 { grid-column:1 / -1; margin:.4rem 0 0; font-size:.75rem; text-transform:uppercase; letter-spacing:.05em; color:var(--mute); }
 </style>
 </head>
 <body>
-<main>
+<header>
   <div class="brand"><i></i> Demolition Notice</div>
+  <div class="chips" role="group" aria-label="How recent">
+    <button data-days="30" aria-pressed="false"><span class="dot" style="background:var(--accent)"></span><span id="n30">30 days</span></button>
+    <button data-days="365" aria-pressed="false"><span class="dot" style="background:var(--year)"></span><span id="n365">1 yr</span></button>
+    <button data-days="0" aria-pressed="true"><span class="dot" style="background:var(--old)"></span><span id="nall">All</span></button>
+  </div>
+</header>
+<div id="map"><div id="status">Loading every teardown…</div></div>
+<footer>Drive by first. Ask the owner or crew before you take anything.</footer>
 
-  <h1>A building near you is getting knocked down.</h1>
-  <p class="lede">Copper wire. Furnaces. AC units. Water heaters. They all go somewhere. We email you the address and who is tearing it down, the morning after the city says yes.</p>
-
-  <form id="f" method="post" action="/api/scrapwatch?action=subscribe">
-    <input id="email" name="email" type="email" required autocomplete="email" placeholder="Your email" aria-label="Your email">
-    <div class="checks" role="group" aria-label="Which buildings">
-      <label><input type="checkbox" name="kinds" value="house" checked> Houses</label>
-      <label><input type="checkbox" name="kinds" value="big" checked> Apartments and stores</label>
-    </div>
-    <button id="go" type="submit">Email me new ones</button>
-    <div id="msg" class="msg" role="status"></div>
-  </form>
-  <p class="fine" style="margin-top:.6rem">Free. Minneapolis. One email on days there is a new one, none on days there isn't.</p>
-
-  <h2>Latest teardowns</h2>
-  <div id="stats" class="stats" hidden></div>
-  <ul id="rows" class="rows"><li class="fine">Loading the latest…</li></ul>
-
-  <h2>Before you go</h2>
-  <ol class="how">
-    <li>The permit means the city said yes. Some buildings come down that same week. Drive by first.</li>
-    <li>Ask the owner or the crew before you take anything. The company name is on every row.</li>
-  </ol>
-
-  <footer>
-    <p>Every row is a public demolition permit from the City of Minneapolis, checked every morning. <span id="fresh"></span></p>
-    <p>Questions: aidan@brickandmortar.dev</p>
-  </footer>
-</main>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <script>
 (async () => {
+  const $ = (id) => document.getElementById(id);
   const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
-  const day = (iso) => { const [y, m, d] = iso.split("-").map(Number); return new Date(Date.UTC(y, m - 1, d, 12)).toLocaleDateString("en-US", { month: "short", day: "numeric", timeZone: "UTC" }); };
-  try {
-    const r = await fetch("/api/scrapwatch?action=feed&limit=15");
-    const d = await r.json();
-    if (!r.ok) throw new Error(d.error);
-    const t = d.totals;
-    const st = document.getElementById("stats");
-    st.hidden = false;
-    st.innerHTML = [
-      [t.last_30, "in the last 30 days"],
-      [t.rows, "in the last year"],
-      [t.houses, "were houses"],
-      [t.big, "apartments or stores"],
-    ].map(([n, l]) => `<div class="stat"><b>${Number(n).toLocaleString("en-US")}</b><span>${l}</span></div>`).join("");
-    document.getElementById("rows").innerHTML = d.rows.map((x) => `
-      <li>
-        <div class="row1"><span class="tag ${x.kind}">${esc(x.label)}</span>
-          <span class="date">${day(x.issued)}${x.year_built ? " · built " + x.year_built : ""}</span></div>
-        <div class="addr"><a href="${esc(x.map)}" target="_blank" rel="noopener">${esc(x.address)}</a></div>
-        <div class="who">${esc(x.wrecker || "Company not listed")}${x.hood ? " · " + esc(x.hood) : ""}${x.what ? " · " + esc(x.what) : ""}</div>
-      </li>`).join("");
-    document.getElementById("fresh").textContent = t.newest ? `Newest permit: ${day(t.newest)}.` : "";
-  } catch (e) {
-    document.getElementById("rows").innerHTML = `<li class="fine">The list didn't load. Try again in a minute.</li>`;
+  const money = (n) => "$" + Number(n).toLocaleString("en-US");
+  const DAY = 864e5;
+  const ageDays = (iso) => { const [y, m, d] = iso.split("-").map(Number); return Math.floor((Date.now() - Date.UTC(y, m - 1, d)) / DAY); };
+  const fmt = (iso) => { if (!iso) return ""; const [y, m, d] = iso.split("-").map(Number); return new Date(Date.UTC(y, m - 1, d || 1, 12)).toLocaleDateString("en-US", { month: "short", ...(d ? { day: "numeric" } : {}), year: "numeric", timeZone: "UTC" }); };
+  const ago = (n) => n <= 0 ? "today" : n === 1 ? "yesterday" : n < 60 ? `${n} days ago` : n < 730 ? `${Math.round(n / 30.4)} months ago` : `${Math.floor(n / 365)} years ago`;
+
+  const map = L.map("map", { zoomControl: false, preferCanvas: true, maxZoom: 16 }).setView([44.97, -93.265], 12);
+  L.control.zoom({ position: "bottomright" }).addTo(map);
+  // Esri's keyless light-gray canvas; Carto's light_all started answering "API KEY REQUIRED" (2026-10-06)
+  L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}", {
+    maxZoom: 16, attribution: "Esri, HERE, OSM · City of Minneapolis · Hennepin County",
+  }).addTo(map);
+  L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Reference/MapServer/tile/{z}/{y}/{x}", { maxZoom: 16 }).addTo(map);
+
+  function popup(r) {
+    const n = ageDays(r.issued), p = r.parcel || {};
+    const age = p.built ? ` · built ${p.built}` : "";
+    const head = [
+      `<a class="p-addr" href="${esc(r.map)}" target="_blank" rel="noopener">${esc(r.address)}</a>`,
+      `<div class="p-when"><span class="${n <= 30 ? "new" : ""}">${esc(r.label)} · okayed ${ago(n)}</span>${age}</div>`,
+      `<div class="p-line">Tearing it down: <b>${esc(r.wrecker || "not listed")}</b></div>`,
+      r.completed ? `<div class="p-line">City closed the permit ${fmt(r.completed)}</div>` : `<div class="p-line">Permit still open${r.stage && r.stage !== r.status ? ` (${esc(r.stage.toLowerCase())})` : ""}</div>`,
+      p.rebuilt ? `<div class="p-line">Already rebuilt: the county shows a building from ${p.rebuilt}</div>` : "",
+      r.what ? `<div class="p-what">${esc(r.what)}</div>` : "",
+      `<div class="p-warn">Drive by first. Ask the owner or crew before you take anything.</div>`,
+    ];
+    const row = (k, v) => (v || v === 0) ? `<dt>${k}</dt><dd>${v}</dd>` : "";
+    const rec = [
+      "<h4>City permit</h4>",
+      row("Permit", esc(r.permit_no)), row("Issued", fmt(r.issued)), row("Status", esc([r.status, r.stage !== r.status ? r.stage : ""].filter(Boolean).join(", "))),
+      row("Closed", fmt(r.completed)), row("Job value", r.value && money(r.value)), row("Permit fees", r.fees && money(Math.round(r.fees))),
+      row("Units removed", r.units_gone), row("Neighborhood", esc(r.hood)), row("Ward", esc(r.ward)),
+    ];
+    if (r.parcel) rec.push(
+      "<h4>County parcel today</h4>",
+      row("Use", esc(p.use)), row("Built", p.built || (p.rebuilt ? `${p.rebuilt} (new building)` : "")),
+      row("Market value", p.value && money(p.value)), row("Land", p.land && money(p.land)), row("Building", p.bldg && money(p.bldg)),
+      row("Lot", p.lot_sqft && `${p.lot_sqft.toLocaleString("en-US")} sq ft`),
+      row("Last sale", p.sold && `${money(p.sold.price)}, ${fmt(p.sold.month)}`),
+    );
+    return head.join("") + `<details><summary>Everything we know</summary><dl>${rec.join("")}</dl></details>`;
   }
 
-  const f = document.getElementById("f"), msg = document.getElementById("msg"), go = document.getElementById("go");
-  f.addEventListener("submit", async (ev) => {
-    ev.preventDefault();
-    msg.className = "msg"; msg.textContent = "";
-    const fd = new FormData(f);
-    const body = { email: fd.get("email"), kinds: fd.getAll("kinds") };
-    if (!body.kinds.length) { msg.className = "msg err"; msg.textContent = "Pick houses, apartments and stores, or both."; return; }
-    go.disabled = true;
-    try {
-      const r = await fetch("/api/scrapwatch?action=subscribe", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
-      const d = await r.json();
-      if (!r.ok || !d.ok) throw new Error(d.error || "Something went wrong.");
-      msg.textContent = d.mailed ? "You're on. Check your inbox." : "You're on. Your first email comes with the next teardown.";
-      f.querySelector("#email").value = "";
-    } catch (e) {
-      msg.className = "msg err"; msg.textContent = e.message;
-    } finally { go.disabled = false; }
+  let rows = [];
+  try {
+    const r = await fetch("/api/scrapwatch");
+    const d = await r.json();
+    if (!r.ok) throw new Error(d.error);
+    rows = d.rows.filter((x) => x.lat && x.lon);
+    $("n30").textContent = `${d.totals.last_30} · 30d`;
+    $("n365").textContent = `${d.totals.last_365} · 1yr`;
+    $("nall").textContent = `${d.totals.rows} · all`;
+    $("status").textContent = "";
+  } catch (e) {
+    $("status").textContent = "The map didn't load. Try again in a minute.";
+    return;
+  }
+
+  // oldest first, so the newest draw on top
+  const marks = rows.slice().reverse().map((r) => {
+    const n = ageDays(r.issued);
+    const style = n <= 30 ? { radius: 9, fillColor: "#c2410c", fillOpacity: .95, color: "#fff", weight: 2 }
+      : n <= 365 ? { radius: 6.5, fillColor: "#f59e0b", fillOpacity: .9, color: "#fff", weight: 1.5 }
+      : { radius: 4.5, fillColor: "#8a8178", fillOpacity: .45, color: "#8a8178", weight: .5, opacity: .6 };
+    const m = L.circleMarker([r.lat, r.lon], style).bindPopup(() => (r.el ||= Object.assign(document.createElement("div"), { innerHTML: popup(r) })), { maxWidth: 290, maxHeight: Math.max(260, $("map").clientHeight - 70), autoPanPadding: [10, 10] });
+    return { m, n };
   });
+  // opening "Everything we know" grows the popup; re-lay it out so it pans back into view
+  map.on("popupopen", (e) => {
+    const d = e.popup.getElement().querySelector("details");
+    if (d) d.addEventListener("toggle", () => e.popup.update());
+  });
+  const layer = L.layerGroup().addTo(map);
+  function show(days) {
+    layer.clearLayers();
+    for (const { m, n } of marks) if (!days || n <= days) layer.addLayer(m);
+    document.querySelectorAll(".chips button").forEach((b) => b.setAttribute("aria-pressed", String(Number(b.dataset.days) === days)));
+  }
+  document.querySelectorAll(".chips button").forEach((b) => b.addEventListener("click", () => show(Number(b.dataset.days))));
+  map.fitBounds(L.latLngBounds(rows.map((r) => [r.lat, r.lon])), { padding: [8, 8] });
+  show(0);
 })();
 </script>
 </body>

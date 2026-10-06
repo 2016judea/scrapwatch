@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "description": "Demolition Notice: a free email the morning a Minneapolis building gets a demolition permit. For scrappers and junk haulers.",
+  "description": "Demolition Notice: every Minneapolis demolition permit on one map, with what the public record says about it. For scrappers and junk haulers.",
   "scripts": {
     "test": "node --test lib/core.test.js",
     "dev": "node scripts/serve_local.mjs"
