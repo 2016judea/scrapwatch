@@ -1,5 +1,7 @@
 # Demolition Notice
 
+**Live:** https://demolition-notice.vercel.app
+
 A map of every building the City of Minneapolis has okayed for demolition, and everything
 the public record says about it, for the people who make a living on what comes out first.
 
